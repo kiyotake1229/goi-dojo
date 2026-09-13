@@ -1,0 +1,16 @@
+{
+  "appId": "work.ltv.goidojo",
+  "appName": "語彙道場",
+  "webDir": "www",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#0A0D1A",
+    "preferredContentMode": "mobile"
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_icon",
+      "iconColor": "#F2C14E"
+    }
+  }
+}

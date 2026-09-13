@@ -1,0 +1,1751 @@
+<title>語彙道場</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0A0D1A">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Barlow+Condensed:wght@600;700&display=swap">
+<style>
+:root{
+  --bg0:#0A0D1A;
+  --bg1:#141033;
+  --bg2:#1E1240;
+  --card:rgba(255,255,255,.055);
+  --card-2:rgba(255,255,255,.09);
+  --edge:rgba(255,255,255,.13);
+  --edge-2:rgba(255,255,255,.22);
+  --tx:#F3F4FA;
+  --tx2:#A9AEC8;
+  --tx3:#6E7496;
+  --gold:#F2C14E;
+  --gold-d:#C89528;
+  --mint:#38DFA6;
+  --mint-d:#0F8F68;
+  --red:#FF5B6E;
+  --red-d:#B32A3B;
+  --disp:"Shippori Mincho B1",serif;
+  --ui:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+  --num:"Barlow Condensed",ui-sans-serif,sans-serif;
+  --safeb:env(safe-area-inset-bottom,0px);
+  --safet:env(safe-area-inset-top,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{
+  margin:0;color:var(--tx);font-family:var(--ui);font-size:15px;line-height:1.65;
+  background:var(--bg0);
+  -webkit-font-smoothing:antialiased;user-select:none;
+}
+button{font-family:inherit;color:inherit}
+
+/* ---- device frame ---- */
+.app{
+  overscroll-behavior:none;touch-action:pan-y;
+  position:relative;width:100%;max-width:460px;height:100dvh;margin:0 auto;
+  overflow:hidden;isolation:isolate;
+  background:
+    radial-gradient(120% 62% at 50% -8%, #2A1A55 0%, rgba(42,26,85,0) 62%),
+    radial-gradient(90% 45% at 50% 104%, #10254A 0%, rgba(16,37,74,0) 60%),
+    linear-gradient(178deg, var(--bg1) 0%, var(--bg0) 55%, #0B1024 100%);
+}
+.app::after{ /* 微細な紙目 */
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;z-index:0;
+  background-image:radial-gradient(rgba(255,255,255,.055) .5px, transparent .5px);
+  background-size:3px 3px;
+}
+.heat{
+  position:absolute;inset:0;pointer-events:none;z-index:1;opacity:0;
+  transition:opacity .5s;
+  background:radial-gradient(85% 45% at 50% 100%, rgba(242,193,78,.30), rgba(242,193,78,0) 70%),
+             radial-gradient(85% 40% at 50% 0%, rgba(242,193,78,.18), rgba(242,193,78,0) 70%);
+}
+#fx{position:absolute;inset:0;z-index:6;pointer-events:none}
+.flash{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;background:#fff}
+.flash.ok{animation:fl .42s ease-out}
+.flash.ng{animation:flr .42s ease-out}
+@keyframes fl{0%{opacity:.30;background:var(--mint)}100%{opacity:0;background:var(--mint)}}
+@keyframes flr{0%{opacity:.34;background:var(--red)}100%{opacity:0;background:var(--red)}}
+.slash{
+  position:absolute;left:-40%;top:44%;width:180%;height:3px;z-index:7;pointer-events:none;
+  background:linear-gradient(90deg,transparent,#fff 42%,#fff 58%,transparent);
+  transform:rotate(-14deg) scaleX(0);transform-origin:left center;opacity:0;
+  filter:drop-shadow(0 0 8px rgba(255,255,255,.9));
+}
+.slash.go{animation:slash .42s cubic-bezier(.2,.9,.2,1)}
+@keyframes slash{0%{opacity:0;transform:rotate(-14deg) scaleX(0)}
+  22%{opacity:1}70%{opacity:1;transform:rotate(-14deg) scaleX(1)}
+  100%{opacity:0;transform:rotate(-14deg) scaleX(1)}}
+.shakey{animation:shk .38s}
+@keyframes shk{0%,100%{transform:translate(0,0)}
+  15%{transform:translate(-7px,2px)}35%{transform:translate(6px,-2px)}
+  55%{transform:translate(-4px,1px)}80%{transform:translate(3px,0)}}
+
+/* ---- screens ---- */
+.scr{
+  position:absolute;inset:0;z-index:2;display:none;flex-direction:column;
+  padding:calc(var(--safet) + 14px) 16px calc(var(--safeb) + 14px);
+}
+.scr.on{display:flex;animation:sIn .32s cubic-bezier(.2,.8,.25,1) both}
+@keyframes sIn{from{opacity:0;transform:translateY(14px) scale(.99)}to{opacity:1;transform:none}}
+.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;margin:0 -4px;
+  padding:0 4px 14px;
+  -webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 22px),transparent);
+  mask-image:linear-gradient(180deg,#000 calc(100% - 22px),transparent)}
+.scroll::-webkit-scrollbar{width:0}
+
+/* ---- home ---- */
+.logo{text-align:center;padding:6px 0 2px}
+.logo .jp{
+  font-family:var(--disp);font-weight:800;font-size:34px;letter-spacing:.22em;
+  margin-left:.22em;line-height:1.1;
+  background:linear-gradient(180deg,#FFF3D0,var(--gold) 55%,#B8801E);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 10px rgba(242,193,78,.28));
+}
+.logo .en{
+  font-family:var(--num);font-size:11px;letter-spacing:.5em;color:var(--tx3);
+  margin-left:.5em;
+}
+.rankbar{
+  margin-top:14px;background:var(--card);border:1px solid var(--edge);
+  border-radius:14px;padding:12px 14px;
+}
+.rankbar .r1{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.rankbar .title{font-family:var(--disp);font-weight:800;font-size:19px;letter-spacing:.1em;color:var(--gold)}
+.rankbar .nx{font-family:var(--num);font-size:13px;color:var(--tx3);letter-spacing:.04em}
+.xp{height:6px;border-radius:6px;background:rgba(255,255,255,.10);margin-top:8px;overflow:hidden}
+.xp i{display:block;height:100%;border-radius:6px;
+  background:linear-gradient(90deg,var(--gold-d),var(--gold));
+  box-shadow:0 0 12px rgba(242,193,78,.55);transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.chips{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.chip{
+  font-family:var(--num);font-size:13px;letter-spacing:.05em;color:var(--tx2);
+  background:rgba(255,255,255,.05);border:1px solid var(--edge);
+  border-radius:999px;padding:3px 11px;
+}
+.chip b{color:var(--gold);font-size:15px}
+.chip.fire b{color:#FF9B4A}
+
+.today{
+  margin-top:12px;border-radius:14px;padding:13px 15px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(242,193,78,.15),rgba(242,193,78,.04));
+  border:1px solid rgba(242,193,78,.30);
+}
+.today .lb{font-family:var(--num);font-size:11px;letter-spacing:.24em;color:var(--gold)}
+.today .w{font-family:var(--disp);font-weight:800;font-size:26px;letter-spacing:.05em;margin-top:2px;line-height:1.25;text-wrap:balance}
+.today .r{font-family:var(--num);font-size:12px;color:var(--tx3);letter-spacing:.08em}
+.today .m{font-size:13px;color:var(--tx2);margin-top:3px}
+
+.mlist{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.mcard{
+  position:relative;display:flex;align-items:center;gap:13px;text-align:left;width:100%;
+  background:var(--card);border:1px solid var(--edge);border-radius:16px;
+  padding:14px 15px;cursor:pointer;overflow:hidden;
+  transition:transform .12s cubic-bezier(.2,.8,.2,1),border-color .2s,background .2s;
+}
+.mcard:active{transform:scale(.975);background:var(--card-2)}
+.mcard .ico{
+  width:44px;height:44px;flex:none;border-radius:13px;display:grid;place-items:center;
+  border:1px solid var(--edge);background:rgba(255,255,255,.05);
+}
+.mcard .ico svg{width:23px;height:23px}
+.mcard .tx{flex:1;min-width:0}
+.mcard .nm{font-family:var(--disp);font-weight:800;font-size:18px;letter-spacing:.09em}
+.mcard .ds{font-size:12px;color:var(--tx3);line-height:1.5}
+.mcard .rt{font-family:var(--num);font-size:13px;color:var(--tx3);text-align:right;flex:none;
+  white-space:nowrap;line-height:1.25}
+.mcard .rt b{display:block;font-size:19px;color:var(--gold);line-height:1.1}
+.mcard.hot{border-color:rgba(242,193,78,.45);
+  background:linear-gradient(120deg,rgba(242,193,78,.14),rgba(255,255,255,.05))}
+.mcard.hot .ico{border-color:rgba(242,193,78,.4);background:rgba(242,193,78,.14)}
+.mcard .done{
+  font-family:var(--num);font-size:11px;letter-spacing:.1em;color:var(--mint);
+  border:1px solid var(--mint-d);border-radius:999px;padding:1px 8px;
+}
+.catwrap{display:flex;gap:8px;overflow-x:auto;margin-top:14px;padding-bottom:4px}
+.catwrap::-webkit-scrollbar{height:0}
+.catb{
+  flex:none;border:1px solid var(--edge);background:var(--card);border-radius:12px;
+  padding:9px 13px;cursor:pointer;text-align:left;transition:transform .12s,background .2s;
+}
+.catb:active{transform:scale(.96);background:var(--card-2)}
+.catb .cn{font-size:13px;font-weight:700;white-space:nowrap}
+.catb .cc{font-family:var(--num);font-size:12px;color:var(--tx3)}
+.remind{display:flex;align-items:center;gap:10px;margin-top:14px;background:var(--card);
+  border:1px solid var(--edge);border-radius:14px;padding:11px 13px}
+.remind .rt1{flex:1;min-width:0}
+.remind .rl{font-size:13px;font-weight:700}
+.remind .rs{font-size:11px;color:var(--tx3)}
+.remind input[type=time]{background:rgba(255,255,255,.06);border:1px solid var(--edge);color:var(--tx);
+  border-radius:9px;padding:5px 8px;font-family:var(--num);font-size:15px;color-scheme:dark}
+.tog{width:44px;height:26px;border-radius:13px;border:1px solid var(--edge);background:rgba(255,255,255,.08);
+  position:relative;cursor:pointer;padding:0;transition:background .2s;flex:none}
+.tog i{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
+.tog.on{background:var(--gold);border-color:var(--gold)}
+.tog.on i{transform:translateX(18px)}
+.hbar{display:flex;gap:8px;margin-top:14px}
+.hbar button{
+  flex:1;background:var(--card);border:1px solid var(--edge);border-radius:12px;
+  padding:11px;font-size:13px;font-weight:700;cursor:pointer;transition:transform .12s,background .2s;
+}
+.hbar button:active{transform:scale(.97);background:var(--card-2)}
+.sect{
+  font-family:var(--num);font-size:12px;letter-spacing:.26em;color:var(--tx3);
+  margin:18px 0 -2px;
+}
+
+/* ---- play ---- */
+.top{display:flex;align-items:center;gap:10px}
+.iconb{
+  width:34px;height:34px;flex:none;border-radius:11px;border:1px solid var(--edge);
+  background:var(--card);display:grid;place-items:center;cursor:pointer;
+}
+.iconb:active{transform:scale(.92)}
+.iconb svg{width:16px;height:16px}
+.score{font-family:var(--num);font-size:26px;line-height:1;letter-spacing:.02em;
+  font-variant-numeric:tabular-nums}
+.score em{font-style:normal;font-size:11px;color:var(--tx3);letter-spacing:.2em;
+  display:block;font-family:var(--num)}
+.top .sp{flex:1}
+.lives{display:flex;gap:5px}
+.life{width:11px;height:11px;border-radius:3px;transform:rotate(45deg);
+  background:var(--red);box-shadow:0 0 9px rgba(255,91,110,.6);transition:all .35s}
+.life.lost{background:transparent;box-shadow:none;border:1px solid rgba(255,255,255,.2)}
+.lives.hit{animation:lifeHit .45s}
+@keyframes lifeHit{0%{transform:scale(1)}25%{transform:scale(1.5);filter:brightness(1.8)}
+  60%{transform:scale(.9)}100%{transform:scale(1)}}
+.prog{font-family:var(--num);font-size:14px;color:var(--tx3);letter-spacing:.06em}
+
+.gauge{height:5px;border-radius:5px;background:rgba(255,255,255,.09);margin-top:11px;overflow:hidden}
+.gauge i{display:block;height:100%;width:100%;border-radius:5px;
+  background:linear-gradient(90deg,#4FA0FF,#38DFA6)}
+.gauge.warn i{background:linear-gradient(90deg,#FF8A5B,var(--red));
+  animation:pulse .55s infinite alternate}
+@keyframes pulse{from{opacity:.55}to{opacity:1}}
+
+.qzone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:10px 4px;min-height:0}
+.combo{
+  font-family:var(--num);font-size:15px;letter-spacing:.12em;color:var(--gold);
+  height:22px;opacity:0;transform:scale(.7);
+  transition:opacity .2s,transform .2s;
+}
+.combo.on{opacity:1;transform:scale(1)}
+.combo.pop{animation:cpop .42s cubic-bezier(.2,1.6,.35,1)}
+@keyframes cpop{0%{transform:scale(1)}30%{transform:scale(1.42)}100%{transform:scale(1)}}
+.qkind{font-family:var(--num);font-size:12px;letter-spacing:.28em;color:var(--tx3);margin-top:2px}
+.qmain{font-family:var(--disp);font-weight:800;line-height:1.3;text-wrap:balance;
+  margin-top:10px;letter-spacing:.05em}
+.qmain.word{font-size:clamp(38px,12.5vw,54px);
+  text-shadow:0 4px 26px rgba(255,255,255,.14)}
+.qmain.mean{font-size:clamp(20px,5.6vw,26px);font-weight:600;letter-spacing:.02em;
+  color:var(--tx);max-width:19ch}
+.qmain.word.sm{font-size:clamp(28px,9.5vw,42px)}
+.qmain.word.xs{font-size:clamp(22px,7.6vw,32px);letter-spacing:.02em}
+.qmain.mean.sm{font-size:clamp(17px,4.6vw,21px)}
+.qzone{overflow-y:auto;overscroll-behavior:contain}
+.qzone::-webkit-scrollbar{width:0}
+@media (max-height:740px){
+  .scr{padding-top:calc(var(--safet) + 8px);padding-bottom:calc(var(--safeb) + 10px)}
+  .gauge{margin-top:8px}
+  .qzone{padding:4px 4px}
+  .combo{height:18px;font-size:13px}
+  .qmain{margin-top:6px}
+  .qmain.word{font-size:clamp(30px,10vw,42px)}
+  .qmain.word.sm{font-size:clamp(26px,8.5vw,36px)}
+  .qmain.word.xs{font-size:clamp(20px,6.8vw,28px)}
+  .qmain.mean{font-size:clamp(17px,4.8vw,21px)}
+  .qmain.mean.sm{font-size:clamp(15px,4.2vw,18px)}
+  .qtag{margin-top:5px}
+  .ans{gap:7px}
+  .ab{min-height:48px;padding:9px 12px;font-size:14px;border-radius:13px}
+  .ab .k{width:22px;height:22px;font-size:13px}
+  .sheet{padding:12px 16px calc(var(--safeb) + 12px)}
+  .sheet .aw{font-size:21px;margin-top:4px}
+  .big{padding:12px;margin-top:10px}
+}
+@media (max-height:600px){
+  .qkind{display:none}
+  .qtag{display:none}
+  .qmain.word{font-size:clamp(24px,8vw,32px)}
+  .qmain.word.sm,.qmain.word.xs{font-size:clamp(20px,6.5vw,26px)}
+  .qmain.mean,.qmain.mean.sm{font-size:clamp(14px,4vw,17px)}
+  .ans{gap:5px}
+  .ab{min-height:40px;padding:6px 11px;font-size:13px;line-height:1.35}
+  .score{font-size:20px}
+}
+.qtag{font-family:var(--num);font-size:12px;letter-spacing:.2em;color:var(--tx3);margin-top:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.lv{display:inline-flex;gap:3px}
+.lv i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.18)}
+.lv i.on{background:var(--gold);box-shadow:0 0 6px rgba(242,193,78,.7)}
+.wr .t .lv{margin-left:6px;vertical-align:middle}
+.wr .t .lv i{width:4px;height:4px}
+.big.sub2{background:var(--card);color:var(--tx);border:1px solid var(--edge);box-shadow:none}
+
+.ans{display:flex;flex-direction:column;gap:9px;flex:none}
+.ab{
+  display:flex;align-items:center;gap:12px;text-align:left;width:100%;min-height:58px;
+  background:var(--card);border:1px solid var(--edge);border-radius:15px;
+  padding:12px 14px;font-size:15px;font-weight:500;line-height:1.45;cursor:pointer;
+  transition:transform .11s cubic-bezier(.2,.8,.2,1),background .18s,border-color .18s,opacity .25s;
+}
+.ab:active:not(:disabled){transform:scale(.975);background:var(--card-2)}
+.ab .k{
+  width:24px;height:24px;flex:none;border-radius:8px;display:grid;place-items:center;
+  font-family:var(--num);font-size:14px;color:var(--tx3);
+  border:1px solid var(--edge);transition:all .18s;
+}
+.ab.right{background:linear-gradient(100deg,rgba(56,223,166,.28),rgba(56,223,166,.10));
+  border-color:var(--mint);box-shadow:0 0 24px rgba(56,223,166,.28);animation:rpop .4s}
+.ab.right .k{border-color:var(--mint);color:var(--mint)}
+.ab.wrong{background:linear-gradient(100deg,rgba(255,91,110,.26),rgba(255,91,110,.08));
+  border-color:var(--red)}
+.ab.wrong .k{border-color:var(--red);color:var(--red)}
+.ab.fade{opacity:.28}
+@keyframes rpop{0%{transform:scale(1)}35%{transform:scale(1.028)}100%{transform:scale(1)}}
+
+/* ---- answer sheet ---- */
+.sheet{
+  position:absolute;left:0;right:0;bottom:0;z-index:8;
+  transform:translateY(102%);transition:transform .3s cubic-bezier(.2,.9,.25,1);
+  background:linear-gradient(180deg,#171233,#0D1024);
+  border-top:1px solid var(--edge-2);border-radius:20px 20px 0 0;
+  padding:16px 18px calc(var(--safeb) + 16px);
+  box-shadow:0 -18px 46px rgba(0,0,0,.6);
+}
+.sheet.up{transform:translateY(0)}
+.sheet .vd{display:flex;align-items:center;gap:9px;font-family:var(--num);
+  font-size:17px;letter-spacing:.14em}
+.sheet.ok .vd{color:var(--mint)}
+.sheet.ng .vd{color:var(--red)}
+.sheet .vd .pts{margin-left:auto;font-size:20px;color:var(--gold)}
+.sheet .aw{font-family:var(--disp);font-weight:800;font-size:25px;letter-spacing:.05em;margin-top:7px}
+.sheet .ar{font-family:var(--num);font-size:13px;color:var(--tx3);letter-spacing:.08em}
+.sheet .am{font-size:14px;color:var(--tx2);margin-top:5px}
+.big{
+  width:100%;flex:none;margin-top:13px;border:none;border-radius:14px;padding:15px;
+  font-size:16px;font-weight:900;letter-spacing:.12em;cursor:pointer;
+  background:linear-gradient(180deg,#FFD97A,var(--gold) 60%,var(--gold-d));
+  color:#241703;box-shadow:0 6px 18px rgba(242,193,78,.3);
+  transition:transform .12s,filter .18s;
+}
+.big:active{transform:scale(.98) translateY(1px);filter:brightness(.95)}
+.big.sub{background:var(--card);color:var(--tx);border:1px solid var(--edge);box-shadow:none}
+
+/* ---- result ---- */
+.res-top{text-align:center;padding:6px 0 2px}
+.stamp{
+  display:inline-grid;place-items:center;width:150px;height:150px;border-radius:50%;
+  border:3px solid var(--gold);color:var(--gold);margin:10px auto 0;
+  font-family:var(--disp);font-weight:800;font-size:40px;letter-spacing:.08em;
+  text-indent:.08em;box-shadow:0 0 40px rgba(242,193,78,.25),inset 0 0 30px rgba(242,193,78,.12);
+  animation:stamp .5s cubic-bezier(.2,1.5,.4,1) both;
+}
+@keyframes stamp{0%{transform:scale(2.4) rotate(-14deg);opacity:0}
+  60%{opacity:1}100%{transform:scale(1) rotate(-6deg);opacity:1}}
+.stamp.bad{border-color:var(--red);color:var(--red);
+  box-shadow:0 0 40px rgba(255,91,110,.22),inset 0 0 30px rgba(255,91,110,.12)}
+.res-score{font-family:var(--num);font-size:52px;line-height:1;margin-top:14px;
+  font-variant-numeric:tabular-nums}
+.res-lb{font-family:var(--num);font-size:12px;letter-spacing:.3em;color:var(--tx3)}
+.newbest{display:inline-block;margin-top:8px;font-family:var(--num);font-size:12px;
+  letter-spacing:.2em;color:#241703;background:var(--gold);border-radius:999px;padding:2px 12px;
+  animation:cpop .6s .3s both}
+.res3{display:flex;gap:8px;margin-top:16px}
+.res3 div{flex:1;background:var(--card);border:1px solid var(--edge);border-radius:13px;
+  padding:10px;text-align:center}
+.res3 .k{font-size:11px;color:var(--tx3)}
+.res3 .v{font-family:var(--num);font-size:23px;line-height:1.1}
+.gain-xp{text-align:center;font-family:var(--num);font-size:14px;color:var(--gold);margin-top:12px;
+  letter-spacing:.1em}
+
+.wl{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.wr{
+  background:var(--card);border:1px solid var(--edge);border-radius:12px;padding:10px 12px;
+  border-left:3px solid var(--red);
+}
+.wr.got{border-left-color:var(--mint)}
+.wr .w{font-family:var(--disp);font-weight:800;font-size:17px;letter-spacing:.04em}
+.wr .w em{font-style:normal;font-family:var(--num);font-size:11px;color:var(--tx3);
+  margin-left:8px;letter-spacing:.06em}
+.wr .m{font-size:13px;color:var(--tx2)}
+.wr .t{font-family:var(--num);font-size:11px;color:var(--tx3);letter-spacing:.08em}
+.filt{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-top:10px}
+.filt::-webkit-scrollbar{height:0}
+.filt button{
+  flex:none;border:1px solid var(--edge);background:var(--card);border-radius:999px;
+  padding:6px 13px;font-size:13px;cursor:pointer;color:var(--tx2);
+}
+.filt button.on{background:var(--gold);border-color:var(--gold);color:#241703;font-weight:700}
+.empty{border:1px dashed var(--edge);border-radius:14px;padding:34px 20px;text-align:center;
+  color:var(--tx3);font-size:13px;margin-top:12px}
+.htitle{font-family:var(--disp);font-weight:800;font-size:21px;letter-spacing:.14em;
+  text-align:center;padding:4px 0 6px}
+.foot{text-align:center;font-family:var(--num);font-size:11px;color:var(--tx3);
+  letter-spacing:.14em;margin-top:16px}
+.foot button{background:none;border:none;color:var(--tx3);font-family:var(--num);
+  font-size:11px;letter-spacing:.14em;cursor:pointer;text-decoration:underline}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
+
+<div class="app" id="app">
+  <div class="heat" id="heat"></div>
+  <canvas id="fx"></canvas>
+  <div class="flash" id="flash"></div>
+  <div class="slash" id="slash"></div>
+
+  <!-- ========== HOME ========== -->
+  <section class="scr on" id="s-home">
+    <div class="scroll">
+      <div class="logo"><div class="jp">語彙道場</div><div class="en">GOI DOJO</div></div>
+
+      <div class="rankbar">
+        <div class="r1">
+          <div class="title" id="rk-title">入門</div>
+          <div class="nx" id="rk-next"></div>
+        </div>
+        <div class="xp"><i id="rk-xp" style="width:0%"></i></div>
+        <div class="chips">
+          <div class="chip fire" id="ch-streak"></div>
+          <div class="chip" id="ch-learn"></div>
+          <div class="chip" id="ch-acc"></div>
+        </div>
+      </div>
+
+      <div class="today" id="today">
+        <div class="lb">今日の一語</div>
+        <div class="w" id="tw"></div>
+        <div class="r" id="tr"></div>
+        <div class="m" id="tm"></div>
+      </div>
+
+      <div class="sect">MODE</div>
+      <div class="mlist" id="mlist"></div>
+
+      <div class="sect">分野別に鍛える</div>
+      <div class="catwrap" id="catwrap"></div>
+
+      <div class="remind" id="remind" hidden>
+        <div class="rt1">
+          <div class="rl">今日の修行のお知らせ</div>
+          <div class="rs" id="rem-note">アプリを閉じていても届きます</div>
+        </div>
+        <input type="time" id="rem-time" value="20:00">
+        <button class="tog" id="rem-tog" aria-label="お知らせ切替"><i></i></button>
+      </div>
+      <div class="hbar">
+        <button id="btn-book">語彙帳</button>
+        <button id="btn-sound"></button>
+        <button id="btn-bgm"></button>
+      </div>
+      <div class="foot">
+        <span id="foot-n"></span> ・ <button id="btn-reset">記録を消す</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PLAY ========== -->
+  <section class="scr" id="s-play">
+    <div class="top">
+      <button class="iconb" id="btn-quit" aria-label="やめる">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="score"><em>SCORE</em><span id="hud-score">0</span></div>
+      <div class="sp"></div>
+      <div class="lives" id="hud-lives"></div>
+      <div class="prog" id="hud-prog"></div>
+    </div>
+    <div class="gauge" id="gauge"><i id="gauge-bar"></i></div>
+
+    <div class="qzone">
+      <div class="combo" id="combo"></div>
+      <div class="qkind" id="qkind"></div>
+      <div class="qmain" id="qmain"></div>
+      <div class="qtag" id="qtag"></div>
+    </div>
+
+    <div class="ans" id="ans"></div>
+
+    <div class="sheet" id="sheet">
+      <div class="vd"><span id="sh-verdict"></span><span class="pts" id="sh-pts"></span></div>
+      <div class="aw" id="sh-word"></div>
+      <div class="ar" id="sh-read"></div>
+      <div class="am" id="sh-mean"></div>
+      <button class="big" id="btn-next">つ ぎ へ</button>
+    </div>
+  </section>
+
+  <!-- ========== RESULT ========== -->
+  <section class="scr" id="s-result">
+    <div class="scroll">
+      <div class="res-top">
+        <div class="res-lb" id="res-mode"></div>
+        <div class="stamp" id="res-stamp"></div>
+        <div class="res-score" id="res-score">0</div>
+        <div class="res-lb">SCORE</div>
+        <div id="res-best"></div>
+      </div>
+      <div class="res3">
+        <div><div class="k">正解</div><div class="v" id="res-hit"></div></div>
+        <div><div class="k">正答率</div><div class="v" id="res-acc"></div></div>
+        <div><div class="k">最大連答</div><div class="v" id="res-combo"></div></div>
+      </div>
+      <div class="gain-xp" id="res-xp"></div>
+      <div class="sect" id="res-lt">取りこぼした語</div>
+      <div id="res-list"></div>
+    </div>
+    <button class="big" id="btn-fix" hidden></button>
+    <button class="big" id="btn-again">も う 一 番</button>
+    <button class="big sub" id="btn-home" style="margin-top:8px">道場にもどる</button>
+  </section>
+
+  <!-- ========== BOOK ========== -->
+  <section class="scr" id="s-book">
+    <div class="htitle">語 彙 帳</div>
+    <div class="filt" id="bk-filt"></div>
+    <div class="scroll" id="bk-list"></div>
+    <button class="big sub" id="btn-home2" style="margin-top:10px">道場にもどる</button>
+  </section>
+</div>
+
+<script>
+/* ==========================================================
+   語彙データ  w:語 r:読み m:意味 c:分野
+   ========================================================== */
+const CATS={goi:"語彙",yoji:"四字熟語",kan:"慣用句",koji:"故事成語",biz:"敬語・仕事語",kata:"カタカナ語",iikae:"大人の言い換え"};
+const DATA=[
+["逢着","ほうちゃく","ある事態や局面に行き当たること","goi",3],
+["韜晦","とうかい","自分の才能や本心を包み隠すこと","goi",3],
+["忖度","そんたく","他人の心中をあれこれ推し量ること","goi",1],
+["敷衍","ふえん","意味をおし広げて詳しく説明すること","goi",3],
+["陶冶","とうや","才能や人格をじっくり育て上げること","goi",2],
+["逼迫","ひっぱく","事態が差し迫って余裕がなくなること","goi",1],
+["斟酌","しんしゃく","相手の事情をくみ取って手加減すること","goi",2],
+["収斂","しゅうれん","ばらついたものが一つにまとまり収まること","goi",2],
+["敬虔","けいけん","神仏を深くうやまい慎み深いさま","goi",2],
+["蓋然性","がいぜんせい","ある事柄が起こる確実さの度合い","goi",2],
+["恣意的","しいてき","論理でなく自分勝手な思いつきで決めるさま","goi",2],
+["傲岸","ごうがん","おごり高ぶって人を見下すさま","goi",3],
+["邂逅","かいこう","思いがけずめぐり会うこと","goi",2],
+["憔悴","しょうすい","心労や疲れで顔つきまでやつれ衰えること","goi",2],
+["払拭","ふっしょく","好ましくないものをすっかり取り払うこと","goi",1],
+["慫慂","しょうよう","そうするようにと強くすすめること","goi",3],
+["弥縫策","びほうさく","その場しのぎに取りつくろうだけの手立て","goi",3],
+["白眉","はくび","同類の中で最も優れているもの","goi",2],
+["矜持","きょうじ","自分の力を信じて抱く誇り","goi",2],
+["齟齬","そご","物事がかみ合わず食い違うこと","goi",2],
+["詭弁","きべん","正しくない理屈で相手を丸め込む議論","goi",1],
+["端緒","たんちょ","物事が始まるきっかけ・手がかり","goi",2],
+["教唆","きょうさ","人をそそのかして悪事をさせること","goi",2],
+["訥弁","とつべん","つかえがちで滑らかでない話し方","goi",3],
+["破天荒","はてんこう","誰も成し得なかったことを初めて行うこと","goi",1],
+["遍在","へんざい","広くあちこちに行き渡って存在すること","goi",2],
+["逡巡","しゅんじゅん","決めかねてぐずぐずためらうこと","goi",2],
+["相好","そうごう","顔つき・表情。「―を崩す」の形で使う","goi",3],
+["慙愧","ざんき","自分の行いを深く恥じ入ること","goi",3],
+["醸成","じょうせい","気運や雰囲気を次第につくり出すこと","goi",2],
+["喧伝","けんでん","さかんに言いふらして世間に広めること","goi",2],
+["昵懇","じっこん","親しく打ち解けた間柄であること","goi",3],
+["頓挫","とんざ","勢いが急にくじけて行き詰まること","goi",1],
+["反駁","はんばく","相手の意見に反対して論じ返すこと","goi",2],
+["逓減","ていげん","数量が段階を追って次第に減っていくこと","goi",2],
+["峻別","しゅんべつ","厳しくはっきりと区別すること","goi",3],
+["冗長","じょうちょう","表現が無駄に長くしまりがないこと","goi",1],
+["婉曲","えんきょく","遠回しにやわらかく言い表すさま","goi",2],
+["示唆","しさ","それとなく気づかせること","goi",1],
+["老獪","ろうかい","経験を積んでいて悪賢いさま","goi",3],
+["寡黙","かもく","口数が少なく余計なことを言わないさま","goi",1],
+["畢竟","ひっきょう","つまるところ。結局のところ","goi",3],
+["穿つ","うがつ","物事の本質や機微を的確に言い当てる","goi",2],
+["帰趨","きすう","物事が最終的に落ち着く先","goi",3],
+["蹉跌","さてつ","つまずいて計画が挫折すること","goi",3],
+["諦観","ていかん","本質を見きわめ執着を捨てて悟ること","goi",2],
+["逢瀬","おうせ","愛し合う男女がひそかに会うこと","goi",3],
+["雅致","がち","上品でみやびな趣","goi",3],
+["首肯","しゅこう","なるほどとうなずいて認めること","goi",2],
+["塵芥","じんかい","取るに足らないつまらないもの","goi",3],
+["瑕疵","かし","本来あるべき品質や条件が欠けていること","goi",2],
+["贖罪","しょくざい","善行や償いによって罪をつぐなうこと","goi",2],
+["流麗","りゅうれい","文章や筆づかいがよどみなく美しいこと","goi",2],
+["剣呑","けんのん","危なっかしくて不安なさま","goi",3],
+["敬遠","けいえん","うわべは敬いながら実際は遠ざけること","goi",1],
+["折衷","せっちゅう","異なる二つの良い所を取り合わせること","goi",1],
+["粛々","しゅくしゅく","静かにおごそかに事を運ぶさま","goi",2],
+["朴訥","ぼくとつ","飾り気がなく口数の少ないさま","goi",2],
+["瞠目","どうもく","驚いたり感心したりして目をみはること","goi",3],
+["蘊蓄","うんちく","十分に研究して蓄えた深い知識","goi",1],
+["逢引","あいびき","人目を忍んで会う約束","goi",3],
+["杞憂","きゆう","無用の心配をすること","goi",1],
+["曖昧模糊","あいまいもこ","ぼんやりして訳がわからないさま","goi",2],
+["刹那","せつな","きわめて短い時間。瞬間","goi",1],
+["漸次","ぜんじ","だんだんと。次第に","goi",2],
+["脆弱","ぜいじゃく","もろくて弱いこと","goi",1],
+["拘泥","こうでい","小さな事に必要以上にこだわること","goi",2],
+["撞着","どうちゃく","前後のつじつまが合わないこと","goi",3],
+["精緻","せいち","極めて細かく手が行き届いていること","goi",2],
+["露呈","ろてい","隠れていた欠点などが表に現れること","goi",1],
+/* --- 四字熟語 --- */
+["呉越同舟","ごえつどうしゅう","仲の悪い者同士が同じ場に居合わせること","yoji",1],
+["呵呵大笑","かかたいしょう","声を上げて大いに笑うこと","yoji",3],
+["巧言令色","こうげんれいしょく","言葉を飾り顔つきを繕って人に媚びること","yoji",2],
+["隔靴掻痒","かっかそうよう","思うようにいかずもどかしいこと","yoji",3],
+["捲土重来","けんどちょうらい","一度敗れた者が勢いを盛り返して来ること","yoji",2],
+["雲散霧消","うんさんむしょう","跡形もなく消えてなくなること","yoji",2],
+["臥薪嘗胆","がしんしょうたん","目的を果たすため長く苦難に耐えること","yoji",1],
+["温故知新","おんこちしん","昔の事を学び直して新しい知識を得ること","yoji",1],
+["換骨奪胎","かんこつだったい","先人の作を作り変えて自分のものにすること","yoji",3],
+["危急存亡","ききゅうそんぼう","生き残るか滅びるかの瀬戸際","yoji",2],
+["群雄割拠","ぐんゆうかっきょ","多くの実力者が各地で勢力を競い合うこと","yoji",1],
+["鶏口牛後","けいこうぎゅうご","大組織の末端より小組織の長になれということ","yoji",2],
+["五里霧中","ごりむちゅう","事情がつかめず方針の立てようがないこと","yoji",1],
+["沈思黙考","ちんしもっこう","黙ってじっくりと深く考えること","yoji",2],
+["疾風迅雷","しっぷうじんらい","行動が非常に素早く激しいこと","yoji",2],
+["首尾一貫","しゅびいっかん","初めから終わりまで態度や方針が変わらないこと","yoji",1],
+["純真無垢","じゅんしんむく","心にけがれがなく素直であること","yoji",1],
+["針小棒大","しんしょうぼうだい","小さな事を大げさに言い立てること","yoji",2],
+["大同小異","だいどうしょうい","細かい違いはあるが大体は同じであること","yoji",1],
+["泰然自若","たいぜんじじゃく","落ち着き払って物事に動じないさま","yoji",2],
+["朝令暮改","ちょうれいぼかい","命令や方針がすぐ変わって定まらないこと","yoji",2],
+["徹頭徹尾","てっとうてつび","初めから終わりまで一貫して押し通すさま","yoji",2],
+["唯唯諾諾","いいだくだく","何事も逆らわず言いなりになるさま","yoji",3],
+["付和雷同","ふわらいどう","自分の考えなく他人の意見に軽々しく従うこと","yoji",1],
+["傍若無人","ぼうじゃくぶじん","人前をはばからず勝手気ままに振る舞うこと","yoji",1],
+["明鏡止水","めいきょうしすい","邪念がなく澄みきった静かな心境","yoji",2],
+["優柔不断","ゆうじゅうふだん","ぐずぐずして物事を決断できないこと","yoji",1],
+["竜頭蛇尾","りゅうとうだび","初めは勢いがよく終わりが振るわないこと","yoji",1],
+["粒粒辛苦","りゅうりゅうしんく","こつこつと努力を積み重ねる苦労","yoji",3],
+["我田引水","がでんいんすい","自分の都合のいいように話を運ぶこと","yoji",2],
+["一日千秋","いちじつせんしゅう","待ち遠しくてたまらないこと","yoji",2],
+["東奔西走","とうほんせいそう","目的のためあちこち忙しく走り回ること","yoji",1],
+["切磋琢磨","せっさたくま","仲間同士で励まし合い共に向上すること","yoji",1],
+["才色兼備","さいしょくけんび","才知と美しさを兼ね備えていること","yoji",1],
+["自家撞着","じかどうちゃく","同じ人の言動が前後で矛盾すること","yoji",3],
+["諸行無常","しょぎょうむじょう","この世の一切は常に移り変わるということ","yoji",1],
+["深謀遠慮","しんぼうえんりょ","先の先まで見通した綿密な計画","yoji",2],
+["晴耕雨読","せいこううどく","悠々自適に心のままに暮らすこと","yoji",2],
+["大器晩成","たいきばんせい","大人物は遅れて才能を現すということ","yoji",1],
+["独立独歩","どくりつどっぽ","人に頼らず自分の信じる道を進むこと","yoji",2],
+["馬耳東風","ばじとうふう","人の意見を心に留めず聞き流すこと","yoji",1],
+["不撓不屈","ふとうふくつ","どんな困難にも屈しないこと","yoji",2],
+["百家争鳴","ひゃっかそうめい","多くの人が自由に意見を戦わせること","yoji",3],
+["虚心坦懐","きょしんたんかい","わだかまりなく素直な心で臨むこと","yoji",2],
+["言語道断","ごんごどうだん","あきれてものも言えないほどひどいこと","yoji",1],
+["櫛風沐雨","しっぷうもくう","風雨にさらされ苦労を重ねること","yoji",3],
+["曲学阿世","きょくがくあせい","学問を曲げて世間に迎合すること","yoji",3],
+/* --- 慣用句 --- */
+["気が置けない","きがおけない","遠慮がいらず心から打ち解けられる","kan",1],
+["情けは人のためならず","なさけはひとのためならず","人への親切は巡り巡って自分に返ってくる","kan",1],
+["役不足","やくぶそく","その人の力量に対して役目が軽すぎること","kan",1],
+["檄を飛ばす","げきをとばす","自分の主張を広く知らせ同意を求めること","kan",2],
+["割を食う","わりをくう","他人のせいで損な立場に立たされること","kan",1],
+["木で鼻をくくる","きではなをくくる","無愛想でそっけない応対をする","kan",3],
+["筆が立つ","ふでがたつ","文章を書くのが上手である","kan",2],
+["足をすくわれる","あしをすくわれる","隙をつかれて失敗させられる","kan",1],
+["采配を振る","さいはいをふる","先頭に立って指図し人を動かす","kan",1],
+["綺羅星のごとく","きらぼしのごとく","立派な人が数多く並んでいるさま","kan",3],
+["二の足を踏む","にのあしをふむ","思いきれずしり込みする","kan",1],
+["目から鼻へ抜ける","めからはなへぬける","賢くて物事の判断が早い","kan",2],
+["濡れ手で粟","ぬれてであわ","苦労せずに多くの利益を得ること","kan",2],
+["枯れ木も山の賑わい","かれきもやまのにぎわい","つまらないものでも無いよりはましだということ","kan",2],
+["転ばぬ先の杖","ころばぬさきのつえ","失敗しないよう前もって備えておくこと","kan",1],
+["他山の石","たざんのいし","他人の誤った言動も自分を磨く助けになる","kan",2],
+["白羽の矢が立つ","しらはのやがたつ","大勢の中から特に選び出される","kan",1],
+["鎬を削る","しのぎをけずる","互いに激しく争う","kan",2],
+["眉唾物","まゆつばもの","だまされないよう用心すべき怪しいもの","kan",1],
+["姑息","こそく","根本を解決せずその場しのぎであること","kan",2],
+["潮時","しおどき","物事を行うのにちょうどよい時機","kan",1],
+["折り紙付き","おりがみつき","質のよさが確実に保証されていること","kan",1],
+["破竹の勢い","はちくのいきおい","止めがたいほど激しい勢い","kan",1],
+["手をこまねく","てをこまねく","何もせずただ傍観している","kan",2],
+["圧巻","あっかん","全体の中で最も優れた部分","kan",1],
+["一目置く","いちもくおく","相手が自分より優れていると認める","kan",1],
+["舌を巻く","したをまく","あまりの見事さに非常に驚き感心する","kan",1],
+["判官贔屓","ほうがんびいき","弱い者や敗者に同情して肩入れすること","kan",3],
+["呆気にとられる","あっけにとられる","思いがけない事に驚きあきれる","kan",1],
+["糊口をしのぐ","ここうをしのぐ","かろうじて生計を立てる","kan",3],
+["琴線に触れる","きんせんにふれる","感動を呼び起こし心を強く動かされる","kan",2],
+["爪に火をともす","つめにひをともす","極端に倹約してつましく暮らす","kan",2],
+["流れに棹さす","ながれにさおさす","勢いに乗って思い通りに事を進める","kan",3],
+["立て板に水","たていたにみず","よどみなくすらすらと話すさま","kan",1],
+["下馬評","げばひょう","当事者以外が興味本位でする噂や評判","kan",2],
+["峠を越す","とうげをこす","最も悪い時期を過ぎて先が見えること","kan",1],
+["水を向ける","みずをむける","相手が話し出すようにそれとなく誘う","kan",2],
+["匙を投げる","さじをなげる","見込みがないと諦めて手を引く","kan",1],
+["筋金入り","すじがねいり","鍛えられて考えや体がしっかりしていること","kan",1],
+["急がば回れ","いそがばまわれ","近道より確実な方法が結局は早いということ","kan",1],
+["石橋を叩く","いしばしをたたく","用心の上にも用心を重ねること","kan",1],
+["雀の涙","すずめのなみだ","ごくわずかな量のたとえ","kan",1],
+["棚から牡丹餅","たなからぼたもち","思いがけない幸運が舞い込むこと","kan",1],
+/* --- 敬語・仕事語 --- */
+["ご査収ください","ごさしゅうください","内容をよく確かめて受け取ってください","biz",1],
+["拝受しました","はいじゅしました","受け取りましたをへりくだって言う表現","biz",2],
+["ご笑納ください","ごしょうのうください","つまらない物ですがお納めくださいの意","biz",2],
+["鋭意","えいい","心を込めて一生懸命に取り組むさま","biz",2],
+["幸甚です","こうじんです","この上なくありがたいという丁寧な表現","biz",2],
+["忌憚のない","きたんのない","遠慮のない、率直な","biz",2],
+["ご厚意","ごこうい","相手の思いやりのある心づかい","biz",1],
+["平素","へいそ","ふだん、常日頃","biz",1],
+["一存","いちぞん","自分ひとりだけの考え","biz",2],
+["善処します","ぜんしょします","事情に応じて適切に処理します","biz",1],
+["割愛する","かつあいする","惜しいと思いながらあえて省くこと","biz",1],
+["遺憾","いかん","期待どおりにならず心残りであること","biz",1],
+["目処","めど","物事のおおよその見通し","biz",1],
+["各位","かくい","大勢の相手それぞれに敬意を表す言い方","biz",1],
+["是々非々","ぜぜひひ","よい事はよい悪い事は悪いと公平に判断する態度","biz",2],
+["布石を打つ","ふせきをうつ","将来のために前もって手を打っておく","biz",2],
+["折衝","せっしょう","利害の異なる相手と掛け合って交渉すること","biz",2],
+["稟議","りんぎ","案を関係者に回して承認を得る手続き","biz",2],
+["敷居が高い","しきいがたかい","不義理などがあって訪ねにくい","biz",1],
+["恐縮ですが","きょうしゅくですが","迷惑をかけて申し訳なく思うという前置き","biz",1],
+["与する","くみする","仲間となって味方する","biz",3],
+["更迭","こうてつ","ある地位の人を他の人と入れ替えること","biz",2],
+["ご足労","ごそくろう","わざわざ出向いてもらうことへの敬語","biz",1],
+["承服しかねます","しょうふくしかねます","納得して従うことはできませんの丁寧表現","biz",2],
+["取り急ぎ","とりいそぎ","十分でないが急ぎ用件だけを伝える前置き","biz",1],
+["ご海容ください","ごかいようください","広い心で許してくださいという意","biz",3],
+["失念しました","しつねんしました","うっかり忘れていましたの改まった表現","biz",1],
+["ご放念ください","ごほうねんください","気にせず忘れてくださいという意","biz",2],
+["高承","こうしょう","相手が承知することを敬って言う語","biz",3],
+["督促","とくそく","約束の履行を強く催促すること","biz",1],
+/* --- カタカナ語 --- */
+["アジェンダ","","会議で話し合うべき項目や議題","kata",1],
+["コンセンサス","","関係者の間で得られた合意","kata",1],
+["エビデンス","","主張を裏づける証拠や根拠","kata",1],
+["リテラシー","","情報を正しく読み解き活用する能力","kata",1],
+["アセスメント","","影響や価値を調べて評価すること","kata",2],
+["ステークホルダー","","事業に利害関係を持つ関係者すべて","kata",2],
+["ドラスティック","","手ぬるさがなく思い切って徹底的なさま","kata",2],
+["ペルソナ","","想定する典型的な顧客像","kata",2],
+["インセンティブ","","やる気を引き出す報奨や動機づけ","kata",1],
+["サステナブル","","環境や社会を損なわず続けられるさま","kata",1],
+["アライアンス","","企業同士が利益のために結ぶ提携","kata",2],
+["デフォルト","","初期設定として定められている状態","kata",1],
+["リスクヘッジ","","危険を予測してあらかじめ被害を抑える備え","kata",1],
+["バッファ","","不測の事態に備えて設けておく余裕","kata",2],
+["オーソライズ","","正式に承認して権限を与えること","kata",2],
+["ローンチ","","新しい製品やサービスを世に出すこと","kata",1],
+["アンビバレント","","相反する感情を同時に抱いているさま","kata",3],
+["ニッチ","","大手が手をつけていない小さな市場","kata",1],
+["コミット","","責任をもって関与し結果を約束すること","kata",1],
+["セグメント","","共通の性質で切り分けた集団や区分","kata",2],
+["ヒューリスティック","","経験則でおおよその答えを素早く出すやり方","kata",3],
+["パラダイム","","その時代を支配する物の見方の枠組み","kata",2],
+["レバレッジ","","小さな力を梃子にして大きな効果を得ること","kata",2],
+["リソース","","仕事に投入できる人・物・時間などの資源","kata",1],
+["アウトソース","","業務を社外の専門業者に委託すること","kata",1],
+["ボトルネック","","全体の進行を妨げている一番の障害","kata",1],
+["フィジビリティ","","計画が実際に実行できるかどうかの度合い","kata",3],
+["ダイバーシティ","","多様な人材が共に生かされている状態","kata",1],
+["コンプライアンス","","法令や社会規範をきちんと守ること","kata",1],
+["イニシアチブ","","先頭に立って物事を進める主導権","kata",1],
+["マイルストーン","","計画の進み具合を測る中間の節目","kata",2],
+["リカレント","","働きながら学び直しを繰り返す教育のあり方","kata",3],
+["シナジー","","組み合わせることで生まれる相乗効果","kata",1],
+["アンガーマネジメント","","怒りの感情と上手に付き合う技術","kata",1],
+["クリティカル","","結果を大きく左右するほど重大なさま","kata",2],
+["エスカレーション","","判断を上位の責任者に引き上げること","kata",2],
+/* --- 語彙（追加） --- */
+["慧眼","けいがん","物事の本質を見抜く鋭い眼力","goi",2],
+["諧謔","かいぎゃく","気のきいた冗談やユーモア","goi",3],
+["僥倖","ぎょうこう","思いがけない幸運","goi",3],
+["気骨","きこつ","信念を貫き容易に屈しない強い気性","goi",2],
+["恬淡","てんたん","欲がなくあっさりしているさま","goi",3],
+["陋習","ろうしゅう","悪い習慣やしきたり","goi",3],
+["鷹揚","おうよう","ゆったりとして小事にこだわらないさま","goi",2],
+["怜悧","れいり","頭の働きが鋭く賢いさま","goi",3],
+["狡猾","こうかつ","ずる賢いさま","goi",1],
+["冷徹","れいてつ","感情に流されず物事を冷静に見通すさま","goi",1],
+["迎合","げいごう","相手の気に入るよう調子を合わせること","goi",1],
+["罵倒","ばとう","激しくののしること","goi",1],
+["愚弄","ぐろう","人をばかにしてからかうこと","goi",2],
+["憐憫","れんびん","かわいそうに思うこと","goi",2],
+["憧憬","しょうけい","あこがれること","goi",2],
+["忸怩","じくじ","自分の行いを深く恥じ入るさま","goi",3],
+["慟哭","どうこく","悲しみのあまり声を上げて泣くこと","goi",2],
+["咀嚼","そしゃく","言葉や文章の意味をよく考えて理解すること","goi",1],
+["会得","えとく","深く理解して自分のものにすること","goi",1],
+["洞察","どうさつ","物事の奥底まで見抜くこと","goi",1],
+["俯瞰","ふかん","高い所から全体を見渡すこと","goi",1],
+["看破","かんぱ","隠された真相を見抜くこと","goi",2],
+["掌握","しょうあく","自分の思い通りにできるよう完全に把握すること","goi",1],
+["呵責","かしゃく","責めさいなむこと。「良心の―」","goi",2],
+["懐柔","かいじゅう","うまく手なずけて従わせること","goi",2],
+["籠絡","ろうらく","巧みに丸め込んで思い通りに操ること","goi",3],
+["跋扈","ばっこ","悪いものが思うままにのさばること","goi",2],
+["蔓延","まんえん","好ましくないものが広がりはびこること","goi",1],
+["凋落","ちょうらく","落ちぶれて衰えること","goi",2],
+["隆盛","りゅうせい","勢いが盛んなこと","goi",1],
+["衰微","すいび","勢いが衰えて弱くなること","goi",2],
+["泰斗","たいと","その道で最も権威のある人","goi",3],
+["碩学","せきがく","学問を深く修めた大学者","goi",3],
+["秀逸","しゅういつ","他より抜きん出て優れていること","goi",1],
+["凡庸","ぼんよう","平凡で特に優れた点がないこと","goi",1],
+["陳腐","ちんぷ","ありふれていて古くさいこと","goi",1],
+["斬新","ざんしん","発想が際立って新しいこと","goi",1],
+["稀有","けう","めったにないこと","goi",1],
+["顕著","けんちょ","はっきりと目立つさま","goi",1],
+["如実","にょじつ","現実のとおりであるさま","goi",2],
+["漸進","ぜんしん","順を追って少しずつ進むこと","goi",2],
+["逸脱","いつだつ","本来の道や決まりから外れること","goi",1],
+["乖離","かいり","結びつくべきものが離れて背き合うこと","goi",2],
+["相克","そうこく","対立するものが互いに勝とうと争うこと","goi",3],
+["桎梏","しっこく","自由を縛るもの","goi",3],
+["含蓄","がんちく","表面に現れない深い意味","goi",2],
+["機微","きび","表面からは分かりにくい微妙な事情","goi",2],
+["妙味","みょうみ","何ともいえない味わいや面白み","goi",2],
+["風情","ふぜい","独特の味わいや趣","goi",1],
+["造詣","ぞうけい","学問や芸術についての深い知識","goi",2],
+["素養","そよう","日頃の学習で身についた教養","goi",1],
+["研鑽","けんさん","学問などを深く究めるため努力すること","goi",1],
+["精進","しょうじん","一つのことに打ち込み努力すること","goi",1],
+["練達","れんたつ","熟練して達人の域に達していること","goi",3],
+["円熟","えんじゅく","経験を積んで人格や技術が完成していること","goi",2],
+["老成","ろうせい","経験を積んで大人びていること","goi",2],
+["拙速","せっそく","出来は悪くても仕事が早いこと","goi",2],
+["巧遅","こうち","出来はよいが仕事が遅いこと","goi",3],
+["杜撰","ずさん","いい加減で誤りが多いこと","goi",1],
+["周到","しゅうとう","手落ちがなく行き届いていること","goi",1],
+["蟄居","ちっきょ","家に閉じこもって外に出ないこと","goi",3],
+["隠遁","いんとん","世を逃れて隠れ住むこと","goi",2],
+["遊説","ゆうぜい","各地を回って意見を説いて回ること","goi",2],
+["喝破","かっぱ","誤りを退け真実をはっきり言い切ること","goi",3],
+["揶揄","やゆ","皮肉を言ってからかうこと","goi",2],
+["誹謗","ひぼう","他人を悪く言うこと","goi",1],
+["諫言","かんげん","目上の人の過ちを指摘していさめること","goi",3],
+["詰問","きつもん","相手を責めて厳しく問いただすこと","goi",2],
+["糾弾","きゅうだん","罪や責任を追及して非難すること","goi",1],
+["弾劾","だんがい","不正や罪を暴いて責任を追及すること","goi",2],
+["峻厳","しゅんげん","非常に厳しくいかめしいさま","goi",3],
+["苛烈","かれつ","厳しく激しいさま","goi",2],
+["熾烈","しれつ","勢いが盛んで激しいさま","goi",2],
+["凄絶","せいぜつ","非常にすさまじいさま","goi",2],
+["悲愴","ひそう","悲しく痛ましいさま","goi",2],
+["哀愁","あいしゅう","もの悲しい気持ち","goi",1],
+["郷愁","きょうしゅう","故郷を懐かしく思う気持ち","goi",1],
+["感慨","かんがい","心に深く感じてしみじみとした思い","goi",1],
+["追憶","ついおく","過ぎ去ったことを思い出すこと","goi",1],
+["述懐","じゅっかい","過去の出来事や思いを語ること","goi",2],
+["吐露","とろ","心の中を隠さず打ち明けること","goi",1],
+["逼塞","ひっそく","落ちぶれて世間から隠れること","goi",3],
+["咆哮","ほうこう","獣などが大声でほえること","goi",2],
+["蹂躙","じゅうりん","暴力で踏みにじること","goi",2],
+["席巻","せっけん","猛烈な勢いで勢力範囲を広げること","goi",1],
+["逐一","ちくいち","一つ残らず順を追って","goi",1],
+["些末","さまつ","取るに足らないささいなこと","goi",1],
+["真髄","しんずい","物事の最も肝心な部分","goi",1],
+["醍醐味","だいごみ","物事の本当の面白さ","goi",1],
+["真骨頂","しんこっちょう","そのものが本来持っている真の姿","goi",2],
+/* --- 四字熟語（追加） --- */
+["一期一会","いちごいちえ","一生に一度の出会いとして大切にすること","yoji",1],
+["一朝一夕","いっちょういっせき","わずかな時日","yoji",1],
+["一石二鳥","いっせきにちょう","一つの行為で二つの利益を得ること","yoji",1],
+["一網打尽","いちもうだじん","悪人などを一度に全員捕らえること","yoji",1],
+["一喜一憂","いっきいちゆう","状況が変わるたびに喜んだり心配したりすること","yoji",1],
+["一心不乱","いっしんふらん","一つのことに心を集中して乱れないこと","yoji",1],
+["一触即発","いっしょくそくはつ","ちょっとしたきっかけで大事になりそうな危険な状態","yoji",1],
+["一騎当千","いっきとうせん","一人で千人を相手にできるほど強いこと","yoji",1],
+["一言半句","いちごんはんく","ほんのわずかな言葉","yoji",2],
+["一蓮托生","いちれんたくしょう","結果がどうなろうと運命を共にすること","yoji",2],
+["一意専心","いちいせんしん","他を顧みず一つのことに心を注ぐこと","yoji",2],
+["一陽来復","いちようらいふく","悪いことが続いた後に良い方向へ向かうこと","yoji",3],
+["海千山千","うみせんやません","経験豊かでずる賢いこと","yoji",2],
+["右往左往","うおうさおう","うろたえてあちこち動き回ること","yoji",1],
+["有為転変","ういてんぺん","この世のすべては移り変わるということ","yoji",2],
+["温厚篤実","おんこうとくじつ","穏やかで誠実な人柄","yoji",2],
+["起死回生","きしかいせい","絶望的な状況を立て直すこと","yoji",1],
+["奇想天外","きそうてんがい","普通では思いもよらない奇抜なこと","yoji",1],
+["疑心暗鬼","ぎしんあんき","疑う心があると何でもないことまで怖く思えること","yoji",1],
+["毀誉褒貶","きよほうへん","ほめたりけなしたりする世間の評判","yoji",3],
+["玉石混淆","ぎょくせきこんこう","優れたものと劣ったものが入り混じっていること","yoji",2],
+["金科玉条","きんかぎょくじょう","絶対的なよりどころとして守るべき規則","yoji",3],
+["空前絶後","くうぜんぜつご","過去にも今後にも例がないほど珍しいこと","yoji",1],
+["君子豹変","くんしひょうへん","徳のある人は過ちに気づけば即座に改めること","yoji",2],
+["軽挙妄動","けいきょもうどう","軽はずみに行動すること","yoji",2],
+["月下氷人","げっかひょうじん","結婚の仲立ちをする人","yoji",3],
+["乾坤一擲","けんこんいってき","運命をかけて大勝負をすること","yoji",3],
+["権謀術数","けんぼうじゅっすう","人を巧みに欺くはかりごと","yoji",2],
+["厚顔無恥","こうがんむち","厚かましく恥知らずなこと","yoji",1],
+["公明正大","こうめいせいだい","公平で隠し事がなく正しいこと","yoji",1],
+["荒唐無稽","こうとうむけい","言うことに根拠がなくでたらめなこと","yoji",1],
+["古色蒼然","こしょくそうぜん","いかにも古めかしいさま","yoji",3],
+["孤軍奮闘","こぐんふんとう","助けもなく一人で懸命に努力すること","yoji",1],
+["虎視眈眈","こしたんたん","機会を狙って様子をうかがうさま","yoji",1],
+["以心伝心","いしんでんしん","言葉にしなくても心が通じ合うこと","yoji",1],
+["異口同音","いくどうおん","多くの人が口をそろえて同じことを言うこと","yoji",1],
+["因果応報","いんがおうほう","行いの善悪に応じて報いがあること","yoji",1],
+["栄枯盛衰","えいこせいすい","栄えたり衰えたりすること","yoji",1],
+["画竜点睛","がりょうてんせい","最後に加える大切な仕上げ","yoji",2],
+["花鳥風月","かちょうふうげつ","自然の美しい風物","yoji",1],
+["夏炉冬扇","かろとうせん","時期外れで役に立たないもの","yoji",3],
+["侃侃諤諤","かんかんがくがく","遠慮なく盛んに議論するさま","yoji",3],
+["汗牛充棟","かんぎゅうじゅうとう","蔵書が非常に多いこと","yoji",3],
+["勧善懲悪","かんぜんちょうあく","善を勧め悪を懲らしめること","yoji",1],
+["艱難辛苦","かんなんしんく","困難に出あって苦しむこと","yoji",2],
+["気宇壮大","きうそうだい","心構えや度量が並外れて大きいこと","yoji",2],
+["旧態依然","きゅうたいいぜん","昔のままで少しも進歩しないさま","yoji",1],
+["驚天動地","きょうてんどうち","世間を非常に驚かせること","yoji",1],
+["苦心惨憺","くしんさんたん","非常に苦心して努力すること","yoji",2],
+["経世済民","けいせいさいみん","世の中を治め人々を救うこと","yoji",3],
+["鶏鳴狗盗","けいめいくとう","つまらない技能でも役に立つことがある","yoji",3],
+["堅忍不抜","けんにんふばつ","我慢強くじっと耐えて心を動かさないこと","yoji",2],
+["豪放磊落","ごうほうらいらく","度量が大きく小事にこだわらないこと","yoji",2],
+["才気煥発","さいきかんぱつ","優れた才能が盛んに外に現れること","yoji",2],
+["自暴自棄","じぼうじき","やけになって自分を粗末にすること","yoji",1],
+["四面楚歌","しめんそか","周囲がすべて敵で孤立していること","yoji",1],
+["主客転倒","しゅかくてんとう","立場や順序が逆になること","yoji",1],
+["順風満帆","じゅんぷうまんぱん","物事が順調に進むこと","yoji",1],
+["枝葉末節","しようまっせつ","本質から外れたささいな部分","yoji",1],
+["新進気鋭","しんしんきえい","新たに現れて勢いが盛んなこと","yoji",1],
+["森羅万象","しんらばんしょう","宇宙に存在するすべてのもの","yoji",1],
+["酔生夢死","すいせいむし","何もせずぼんやりと一生を終えること","yoji",3],
+["清廉潔白","せいれんけっぱく","心が清く私欲がないこと","yoji",1],
+["青天霹靂","せいてんのへきれき","突然起こる思いがけない出来事","yoji",1],
+["是非曲直","ぜひきょくちょく","物事の善悪や正邪","yoji",2],
+["千載一遇","せんざいいちぐう","めったにない絶好の機会","yoji",1],
+["率先垂範","そっせんすいはん","人の先に立って模範を示すこと","yoji",2],
+["泰山北斗","たいざんほくと","その道で最も仰ぎ尊ばれる人","yoji",3],
+["大言壮語","たいげんそうご","できそうもないことを大げさに言うこと","yoji",1],
+["多岐亡羊","たきぼうよう","方針が多すぎて選択に迷うこと","yoji",3],
+["単刀直入","たんとうちょくにゅう","前置きなしにいきなり本題に入ること","yoji",1],
+["魑魅魍魎","ちみもうりょう","さまざまな化け物。悪だくみをする者","yoji",2],
+["猪突猛進","ちょとつもうしん","向こう見ずに突き進むこと","yoji",1],
+["天衣無縫","てんいむほう","飾り気がなく自然で完全なこと","yoji",2],
+["電光石火","でんこうせっか","動作がきわめて素早いこと","yoji",1],
+["当意即妙","とういそくみょう","その場に応じて即座に機転を利かせること","yoji",2],
+["同床異夢","どうしょういむ","行動を共にしながら考えが異なること","yoji",2],
+["日進月歩","にっしんげっぽ","絶え間なく急速に進歩すること","yoji",1],
+["破顔一笑","はがんいっしょう","顔をほころばせてにっこり笑うこと","yoji",2],
+["波瀾万丈","はらんばんじょう","変化が激しく劇的なこと","yoji",1],
+["美辞麗句","びじれいく","うわべだけ美しく飾った言葉","yoji",1],
+["百戦錬磨","ひゃくせんれんま","多くの経験を積んで鍛えられていること","yoji",1],
+["不言実行","ふげんじっこう","黙って実行すること","yoji",1],
+["不俱戴天","ふぐたいてん","同じ天の下に生かしておけないほどの深い恨み","yoji",3],
+["粉骨砕身","ふんこつさいしん","力の限り努力すること","yoji",1],
+["傍目八目","おかめはちもく","第三者の方が当事者より物事がよく見えること","yoji",3],
+["本末転倒","ほんまつてんとう","大事なことと些細なことを取り違えること","yoji",1],
+["満身創痍","まんしんそうい","全身傷だらけ。徹底的に痛めつけられた状態","yoji",1],
+["面目躍如","めんもくやくじょ","評価どおりの活躍をして生き生きするさま","yoji",2],
+["唯我独尊","ゆいがどくそん","自分だけが優れていると思い上がること","yoji",2],
+["羊頭狗肉","ようとうくにく","見かけと中身が一致しないこと","yoji",2],
+["臨機応変","りんきおうへん","状況に応じて適切に対処すること","yoji",1],
+["和魂洋才","わこんようさい","日本の精神を保ちつつ西洋の学問を取り入れること","yoji",2],
+["明眸皓歯","めいぼうこうし","美人の形容","yoji",3],
+["無味乾燥","むみかんそう","面白みや潤いがないこと","yoji",1],
+/* --- 慣用句（追加） --- */
+["顔が広い","かおがひろい","知り合いが多い","kan",1],
+["顔に泥を塗る","かおにどろをぬる","面目を失わせる","kan",1],
+["肩の荷が下りる","かたのにがおりる","責任や負担から解放されて楽になる","kan",1],
+["肩を持つ","かたをもつ","一方の味方をする","kan",1],
+["腹を割る","はらをわる","本心を隠さず打ち明ける","kan",1],
+["腹に据えかねる","はらにすえかねる","怒りを抑えきれない","kan",2],
+["腹を括る","はらをくくる","覚悟を決める","kan",1],
+["腑に落ちる","ふにおちる","納得がいく","kan",1],
+["歯に衣着せぬ","はにきぬきせぬ","遠慮せずずけずけと言う","kan",1],
+["歯が立たない","はがたたない","相手が強すぎてかなわない","kan",1],
+["口が減らない","くちがへらない","言い負かされても言い返す","kan",1],
+["口火を切る","くちびをきる","物事を最初に始める","kan",1],
+["耳が痛い","みみがいたい","弱点を突かれて聞くのがつらい","kan",1],
+["耳を貸す","みみをかす","人の言うことを聞く","kan",1],
+["鼻が高い","はながたかい","誇らしい","kan",1],
+["鼻であしらう","はなであしらう","相手を見下し冷淡に扱う","kan",1],
+["鼻につく","はなにつく","飽きて嫌になる","kan",1],
+["目が利く","めがきく","物の良し悪しを見分ける力がある","kan",1],
+["目に余る","めにあまる","ひどすぎて見過ごせない","kan",1],
+["目を掛ける","めをかける","特別に面倒を見る","kan",1],
+["眉をひそめる","まゆをひそめる","不快に感じて顔をしかめる","kan",1],
+["首が回らない","くびがまわらない","借金などで金銭のやりくりがつかない","kan",1],
+["首を長くする","くびをながくする","待ち遠しく思う","kan",1],
+["手を焼く","てをやく","扱いに困る","kan",1],
+["手塩にかける","てしおにかける","自分で世話をして大切に育てる","kan",1],
+["足が出る","あしがでる","予算を超えて赤字になる","kan",1],
+["足元を見る","あしもとをみる","相手の弱みにつけ込む","kan",1],
+["足を洗う","あしをあらう","悪い仕事や生活から抜け出す","kan",1],
+["膝を打つ","ひざをうつ","ふと思い当たったり感心したりする","kan",2],
+["膝を交える","ひざをまじえる","打ち解けて親しく話し合う","kan",2],
+["胸を借りる","むねをかりる","格上の相手に稽古をつけてもらう","kan",1],
+["胸を撫で下ろす","むねをなでおろす","心配が消えて安心する","kan",1],
+["骨身を惜しまず","ほねみをおしまず","苦労をいとわず","kan",1],
+["肝が据わる","きもがすわる","度胸があって物事に動じない","kan",1],
+["肝に銘じる","きもにめいじる","心に深く刻んで忘れない","kan",1],
+["血の気が多い","ちのけがおおい","血気盛んで興奮しやすい","kan",1],
+["気が気でない","きがきでない","心配で落ち着かない","kan",1],
+["気を吐く","きをはく","意気盛んなところを見せる","kan",2],
+["気炎を上げる","きえんをあげる","意気盛んに議論したり主張したりする","kan",2],
+["息を呑む","いきをのむ","驚きや緊張で一瞬息を止める","kan",1],
+["息が長い","いきがながい","長期間にわたって続く","kan",1],
+["水に流す","みずにながす","過去のいざこざをなかったことにする","kan",1],
+["水を差す","みずをさす","順調な物事に横から邪魔を入れる","kan",1],
+["油を売る","あぶらをうる","仕事を怠けて無駄話をする","kan",1],
+["火に油を注ぐ","ひにあぶらをそそぐ","勢いのあるものをさらに勢いづかせる","kan",1],
+["火の車","ひのくるま","家計が非常に苦しいこと","kan",1],
+["花を持たせる","はなをもたせる","手柄や名誉を相手に譲る","kan",1],
+["花道を飾る","はなみちをかざる","最後を華々しく締めくくる","kan",1],
+["釘を刺す","くぎをさす","後で問題が起きないよう念を押す","kan",1],
+["熱に浮かされる","ねつにうかされる","夢中になって理性を失う","kan",2],
+["虫がいい","むしがいい","自分勝手で厚かましい","kan",1],
+["虫の居所が悪い","むしのいどころがわるい","機嫌が悪い","kan",1],
+["猫の手も借りたい","ねこのてもかりたい","非常に忙しい","kan",1],
+["猫をかぶる","ねこをかぶる","本性を隠しておとなしく見せる","kan",1],
+["馬が合う","うまがあう","気が合う","kan",1],
+["狐につままれる","きつねにつままれる","意外なことにぼんやりする","kan",1],
+["蛙の子は蛙","かえるのこはかえる","子は親に似るものだ","kan",1],
+["月とすっぽん","つきとすっぽん","比べものにならないほど違うこと","kan",1],
+["青菜に塩","あおなにしお","元気をなくしてしょげているさま","kan",2],
+["釈迦に説法","しゃかにせっぽう","専門家に素人が教える愚かさ","kan",1],
+["豆腐にかすがい","とうふにかすがい","何の手ごたえもないこと","kan",2],
+["糠に釘","ぬかにくぎ","効き目がまったくないこと","kan",1],
+["元の木阿弥","もとのもくあみ","一度良くなった物事が元の状態に戻ること","kan",2],
+["柳に風","やなぎにかぜ","逆らわずに受け流すこと","kan",2],
+["後の祭り","あとのまつり","時機を逃して手遅れなこと","kan",1],
+["虻蜂取らず","あぶはちとらず","二つを狙って両方とも失うこと","kan",2],
+["灯台下暗し","とうだいもとくらし","身近なことはかえって気づきにくい","kan",1],
+["瓢箪から駒","ひょうたんからこま","思いがけない所から思いがけない物が出ること","kan",2],
+["身から出た錆","みからでたさび","自分の行いが原因で苦しむこと","kan",1],
+["弘法にも筆の誤り","こうぼうにもふでのあやまり","名人でも失敗することがある","kan",1],
+["餅は餅屋","もちはもちや","何事も専門家に任せるのが一番","kan",1],
+["渡りに船","わたりにふね","望んでいたことが都合よく起こること","kan",1],
+["一寸の虫にも五分の魂","いっすんのむしにもごぶのたましい","小さな者にもそれ相応の意地がある","kan",1],
+["出る杭は打たれる","でるくいはうたれる","目立つ者は妬まれ非難される","kan",1],
+["朱に交われば赤くなる","しゅにまじわればあかくなる","人は付き合う相手に影響される","kan",1],
+["雨降って地固まる","あめふってじかたまる","もめごとの後かえって良い状態になる","kan",1],
+["魚心あれば水心","うおごころあればみずごころ","相手が好意を持てばこちらも応える","kan",2],
+["機先を制する","きせんをせいする","相手より先に行動して優位に立つ","kan",2],
+["一矢を報いる","いっしをむくいる","反撃してわずかでも仕返しする","kan",2],
+["とどのつまり","","結局のところ","kan",2],
+["一線を画す","いっせんをかくす","はっきり区別をつける","kan",1],
+["腰を据える","こしをすえる","落ち着いて物事に取り組む","kan",1],
+["玉に瑕","たまにきず","立派な物にわずかな欠点があること","kan",1],
+/* --- 故事成語（新分野） --- */
+["矛盾","むじゅん","つじつまが合わないこと","koji",1],
+["蛇足","だそく","余計な付け足し","koji",1],
+["推敲","すいこう","文章を何度も練り直すこと","koji",1],
+["守株","しゅしゅ","古い習慣にとらわれ融通がきかないこと","koji",3],
+["朝三暮四","ちょうさんぼし","目先の違いにとらわれ結果が同じと気づかないこと","koji",2],
+["五十歩百歩","ごじっぽひゃっぽ","多少の違いはあっても本質は同じこと","koji",1],
+["背水の陣","はいすいのじん","退路を断って全力で事に当たること","koji",1],
+["漁夫の利","ぎょふのり","争う二者の隙に第三者が利益をさらうこと","koji",1],
+["虎の威を借る狐","とらのいをかるきつね","権力者の力を頼んで威張る者","koji",1],
+["井の中の蛙","いのなかのかわず","狭い世界しか知らず得意になっている人","koji",1],
+["塞翁が馬","さいおうがうま","人生の幸不幸は予測できないということ","koji",1],
+["逆鱗に触れる","げきりんにふれる","目上の人を激しく怒らせる","koji",1],
+["登竜門","とうりゅうもん","成功への関門","koji",1],
+["断腸の思い","だんちょうのおもい","はらわたがちぎれるほどつらい思い","koji",1],
+["虎穴に入らずんば虎子を得ず","こけつにいらずんばこじをえず","危険を冒さなければ大きな成果は得られない","koji",1],
+["一炊の夢","いっすいのゆめ","人生の栄華ははかないということ","koji",3],
+["管鮑の交わり","かんぽうのまじわり","利害を超えた深い友情","koji",3],
+["水魚の交わり","すいぎょのまじわり","離れられないほど親密な間柄","koji",2],
+["刎頸の交わり","ふんけいのまじわり","首を切られても悔いないほどの固い友情","koji",3],
+["三顧の礼","さんこのれい","礼を尽くして優れた人物を迎えること","koji",2],
+["泣いて馬謖を斬る","ないてばしょくをきる","規律のため愛する部下でも処罰すること","koji",3],
+["髀肉の嘆","ひにくのたん","実力を発揮する機会がないことを嘆くこと","koji",3],
+["覆水盆に返らず","ふくすいぼんにかえらず","一度したことは取り返しがつかない","koji",1],
+["李下に冠を正さず","りかにかんむりをたださず","疑われるような行いは避けよ","koji",2],
+["青は藍より出でて藍より青し","あおはあいよりいでてあいよりあおし","弟子が師を超えること","koji",2],
+["完璧","かんぺき","欠点がまったくないこと","koji",1],
+["蛍雪の功","けいせつのこう","苦労して学問に励んだ成果","koji",2],
+["助長","じょちょう","余計な手助けでかえって悪くすること","koji",2],
+["知音","ちいん","自分をよく理解してくれる親友","koji",3],
+["竹馬の友","ちくばのとも","幼い頃からの友人","koji",1],
+["莫逆の友","ばくぎゃくのとも","心が通じ合った親友","koji",3],
+["牛耳る","ぎゅうじる","組織を思うままに支配する","koji",1],
+["先んずれば人を制す","さきんずればひとをせいす","人より先に行えば有利になる","koji",1],
+["過ぎたるは猶及ばざるが如し","すぎたるはなおおよばざるがごとし","度を過ぎるのは足りないのと同じく良くない","koji",1],
+["良薬は口に苦し","りょうやくはくちににがし","ためになる忠告は聞くのがつらい","koji",1],
+["天網恢恢疎にして漏らさず","てんもうかいかいそにしてもらさず","悪事は必ず天罰を受ける","koji",2],
+["木に縁りて魚を求む","きによりてうおをもとむ","方法を誤れば目的は達せられない","koji",3],
+["螳螂の斧","とうろうのおの","弱者が力量をわきまえず強者に立ち向かうこと","koji",3],
+["羹に懲りて膾を吹く","あつものにこりてなますをふく","失敗に懲りて用心しすぎること","koji",2],
+["呉下の阿蒙","ごかのあもう","進歩のない人","koji",3],
+["洛陽の紙価を高める","らくようのしかをたかめる","著書が評判になりよく売れること","koji",3],
+["宋襄の仁","そうじょうのじん","無用の情けをかけて痛い目にあうこと","koji",3],
+["杯中の蛇影","はいちゅうのだえい","疑えば何でもないことも不安になること","koji",3],
+["唇亡びて歯寒し","くちびるほろびてはさむし","助け合う一方が滅ぶと他方も危うくなる","koji",3],
+["遠交近攻","えんこうきんこう","遠国と結んで近国を攻める策","koji",3],
+["一敗地に塗れる","いっぱいちにまみれる","二度と立ち直れないほど完敗する","koji",2],
+["苛政は虎よりも猛し","かせいはとらよりもたけし","悪政は虎より恐ろしい","koji",2],
+/* --- 敬語・仕事語（追加） --- */
+["ご教示ください","ごきょうじください","知識や方法を教えてくださいの丁寧表現","biz",1],
+["ご教授ください","ごきょうじゅください","専門的な学問や技術を継続的に教えてほしいときの表現","biz",2],
+["ご高覧","ごこうらん","相手が見ることを敬って言う語","biz",2],
+["ご清祥","ごせいしょう","相手が健康で幸せに暮らしていること","biz",2],
+["ご健勝","ごけんしょう","相手が健康であることを祝う語","biz",1],
+["ご隆盛","ごりゅうせい","相手の会社などが栄えていること","biz",2],
+["ご愛顧","ごあいこ","ひいきにして引き立ててもらうこと","biz",1],
+["ご高配","ごこうはい","相手の心配りを敬って言う語","biz",2],
+["ご一報","ごいっぽう","簡単に知らせること","biz",1],
+["ご容赦","ごようしゃ","許してもらうこと","biz",1],
+["ご承知おきください","ごしょうちおきください","前もって知っておいてくださいの意","biz",1],
+["ご自愛ください","ごじあいください","お体を大切にしてくださいの意","biz",1],
+["何卒","なにとぞ","どうか。相手に強く願う語","biz",1],
+["僭越ながら","せんえつながら","身分を越えて出過ぎたことをしますがの前置き","biz",1],
+["微力ながら","びりょくながら","力は足りませんがの謙遜表現","biz",1],
+["不躾ながら","ぶしつけながら","失礼を承知でという前置き","biz",1],
+["差し支えなければ","さしつかえなければ","都合が悪くなければ","biz",1],
+["折り入って","おりいって","特別にお願いしたいときの前置き","biz",1],
+["末筆ながら","まっぴつながら","手紙の終わりに添える結びの前置き","biz",2],
+["略儀ながら","りゃくぎながら","正式な手順を省くことを断る言葉","biz",2],
+["承前","しょうぜん","前の続きであること","biz",3],
+["別段","べつだん","特に。取り立てて","biz",1],
+["所存","しょぞん","考え。「〜する所存です」","biz",1],
+["所感","しょかん","心に感じたこと","biz",1],
+["懸案","けんあん","以前から問題になりながら解決していない事柄","biz",1],
+["喫緊","きっきん","差し迫っていて重要なこと","biz",2],
+["是正","ぜせい","悪い点を改めて正すこと","biz",1],
+["精査","せいさ","詳しく調べること","biz",1],
+["勘案","かんあん","あれこれ考え合わせること","biz",1],
+["牽制","けんせい","相手の注意を引きつけ自由に行動させないこと","biz",1],
+["遵守","じゅんしゅ","法律や規則を守ること","biz",1],
+["履行","りこう","決めたことや約束を実行すること","biz",1],
+["相殺","そうさい","差し引きしてゼロにすること","biz",1],
+["按分","あんぶん","基準となる数量に比例して割り振ること","biz",2],
+["逓増","ていぞう","次第に増えること","biz",2],
+["汎用","はんよう","一つのものを広くいろいろな用途に使うこと","biz",1],
+["恒常的","こうじょうてき","一定の状態を保って変わらないさま","biz",1],
+["暫定","ざんてい","正式に決まるまで仮に定めること","biz",1],
+["抜本的","ばっぽんてき","根本から改めるさま","biz",1],
+["包括的","ほうかつてき","全体をひっくるめて扱うさま","biz",1],
+["散見","さんけん","あちこちに見受けられること","biz",1],
+["鑑みる","かんがみる","先例や手本に照らして考える","biz",1],
+["踏襲","とうしゅう","これまでのやり方をそのまま受け継ぐこと","biz",1],
+["拝借","はいしゃく","借りることの謙譲語","biz",1],
+["拝察","はいさつ","推察することの謙譲語","biz",2],
+["拝命","はいめい","任命されることの謙譲語","biz",2],
+/* --- カタカナ語（追加） --- */
+["アサイン","","仕事や役割を割り当てること","kata",1],
+["アライン","","方向性や認識を一致させること","kata",2],
+["アウトプット","","成果として外に出したもの","kata",1],
+["インプット","","知識や情報を取り込むこと","kata",1],
+["オンボーディング","","新しく加わった人が慣れるよう支援する仕組み","kata",2],
+["オポチュニティ","","好機。ビジネスの機会","kata",2],
+["カニバリゼーション","","自社製品同士が客を奪い合うこと","kata",2],
+["ガバナンス","","組織を健全に運営するための統治の仕組み","kata",1],
+["キャズム","","新製品が一般に広まる前に立ちはだかる大きな溝","kata",3],
+["クロージング","","商談を成約に導く最終段階","kata",1],
+["コアコンピタンス","","他社にまねできない自社の中核的な強み","kata",2],
+["コモディティ化","","差別化が失われ価格競争になること","kata",2],
+["コンティンジェンシー","","不測の事態に備えた対応策","kata",3],
+["サブスクリプション","","定額制で継続利用する仕組み","kata",1],
+["スキーム","","計画や仕組みの枠組み","kata",1],
+["スケーラビリティ","","規模の拡大に対応できる能力","kata",2],
+["ステルス","","相手に気づかれないようこっそり行うこと","kata",1],
+["セレンディピティ","","偶然から思いがけない価値を見つけること","kata",3],
+["ソリューション","","問題を解決する手段や仕組み","kata",1],
+["ダイナミック","","動的で力強く変化に富むさま","kata",1],
+["タスクフォース","","特定の課題のために一時的に編成される組織","kata",2],
+["ディスラプション","","既存の市場を破壊するような革新","kata",2],
+["デューデリジェンス","","投資や買収の前に行う詳細な調査","kata",3],
+["トレードオフ","","一方を取れば他方を失う関係","kata",1],
+["ナレッジ","","組織で共有する知識や経験","kata",1],
+["ネゴシエーション","","交渉","kata",1],
+["バイアス","","判断をゆがめる思い込みや偏り","kata",1],
+["パラレル","","並行して同時に進めること","kata",1],
+["ピボット","","事業の方向を大きく転換すること","kata",2],
+["フィードバック","","結果や評価を本人に返して改善につなげること","kata",1],
+["ファシリテーション","","会議や議論を円滑に進める働きかけ","kata",1],
+["ブレークスルー","","難問を突破して大きく前進すること","kata",1],
+["プロトタイプ","","本格生産前の試作品","kata",1],
+["ベネフィット","","利用者が得られる利益や恩恵","kata",1],
+["ベンチマーク","","比較の基準となる指標や優れた事例","kata",1],
+["ペンディング","","保留。先送りにすること","kata",1],
+["マネタイズ","","無料のサービスなどから収益を生み出すこと","kata",1],
+["マター","","担当。「〜マター」で責任の所在を表す","kata",2],
+["モチベーション","","やる気。動機づけ","kata",1],
+["リスケジュール","","予定を組み直すこと","kata",1],
+["リテンション","","顧客や社員をつなぎ止めること","kata",2],
+["リマインド","","忘れないよう改めて知らせること","kata",1],
+["ロジカル","","論理的で筋道が通っているさま","kata",1],
+["ロードマップ","","目標までの道筋を示した計画表","kata",1],
+["ローカライズ","","地域の言語や文化に合わせて作り変えること","kata",2],
+["オルタナティブ","","既存のものに代わる別の選択肢","kata",2],
+["アドホック","","その場限りの。特定目的のための","kata",3],
+["インクルージョン","","多様な人を受け入れ活かすこと","kata",2],
+["ステートメント","","公式の声明や意見表明","kata",2],
+["エンゲージメント","","愛着や関わりの深さ","kata",1],
+/* --- 大人の言い換え（新分野） --- */
+["甚だ","はなはだ","「とても・非常に」の改まった言い方","iikae",1],
+["些か","いささか","「少し」の改まった言い方","iikae",1],
+["概ね","おおむね","「だいたい」の改まった言い方","iikae",1],
+["予め","あらかじめ","「前もって」の改まった言い方","iikae",1],
+["直ちに","ただちに","「すぐに」の改まった言い方","iikae",1],
+["速やかに","すみやかに","「早く・遅れずに」の改まった言い方","iikae",1],
+["折に触れて","おりにふれて","「機会があるたびに」の改まった言い方","iikae",1],
+["先般","せんぱん","「この前」の改まった言い方","iikae",1],
+["過日","かじつ","「先日」の改まった言い方","iikae",2],
+["昨今","さっこん","「最近」の改まった言い方","iikae",1],
+["目下","もっか","「今のところ」の改まった言い方","iikae",1],
+["早急","さっきゅう","「大急ぎで」の改まった言い方","iikae",1],
+["幾分","いくぶん","「いくらか」の改まった言い方","iikae",1],
+["誠に","まことに","「本当に」の改まった言い方","iikae",1],
+["幸い","さいわい","「運よく・ありがたいことに」の改まった言い方","iikae",1],
+["あいにく","","「都合が悪く」の改まった言い方","iikae",1],
+["やむを得ず","やむをえず","「仕方なく」の改まった言い方","iikae",1],
+["差し当たり","さしあたり","「とりあえず」の改まった言い方","iikae",1],
+["心ならずも","こころならずも","「不本意ながら」の改まった言い方","iikae",2],
+["かねてより","","「以前から」の改まった言い方","iikae",1],
+["くれぐれも","","「どうか・十分に」の改まった言い方","iikae",1],
+["存じます","ぞんじます","「思います・知っています」の謙譲表現","iikae",1],
+["承ります","うけたまわります","「聞きます・引き受けます」の謙譲表現","iikae",1],
+["伺います","うかがいます","「行きます・聞きます」の謙譲表現","iikae",1],
+["おいでになる","","「来る・行く・いる」の尊敬表現","iikae",1],
+["お目にかかる","おめにかかる","「会う」の謙譲表現","iikae",1],
+["お越しいただく","おこしいただく","「来てもらう」の敬語表現","iikae",1],
+["拝見する","はいけんする","「見る」の謙譲表現","iikae",1],
+["召し上がる","めしあがる","「食べる・飲む」の尊敬表現","iikae",1],
+["お手すきの際に","おてすきのさいに","「暇なときに」の改まった言い方","iikae",1],
+["お力添え","おちからぞえ","「手伝い・協力」の改まった言い方","iikae",1],
+["お含みおきください","おふくみおきください","「心に留めておいてください」の改まった言い方","iikae",2],
+["ご無沙汰","ごぶさた","「長く連絡しないこと」の改まった言い方","iikae",1],
+["ご期待に沿えず","ごきたいにそえず","「期待に応えられず」の改まった言い方","iikae",1],
+["賜る","たまわる","「もらう」の謙譲表現","iikae",2],
+["仰せ","おおせ","「言いつけ・命令」の尊敬表現","iikae",2],
+["慮る","おもんぱかる","「深く考えて配慮する」の改まった言い方","iikae",2],
+["携わる","たずさわる","「関わる」の改まった言い方","iikae",1],
+["赴く","おもむく","「行く・向かう」の改まった言い方","iikae",1],
+["控える","ひかえる","「やめておく・少なくする」の改まった言い方","iikae",1],
+["弁える","わきまえる","「立場や道理を理解する」の改まった言い方","iikae",1],
+["了見","りょうけん","「考え・心づもり」の改まった言い方","iikae",2],
+["所以","ゆえん","「理由・わけ」の改まった言い方","iikae",2],
+["体たらく","ていたらく","「ひどいありさま」の改まった言い方","iikae",2]
+].map((x,i)=>({id:i,w:x[0],r:x[1],m:x[2],c:x[3],lv:x[4]||2}));
+const LVNAME=["初級","中級","上級"],BASE=[100,120,150];
+
+/* ==========================================================
+   保存
+   ========================================================== */
+const KEY="goidojo.v1";
+const NATIVE=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
+const CAP=(window.Capacitor&&window.Capacitor.Plugins)||{};
+const defState={best:{},stat:{},streak:{last:"",days:0},dailyDone:"",exp:0,mute:false,bgmOff:false,remind:{on:false,time:"20:00"}};
+let S=load();
+function load(){
+  try{const r=localStorage.getItem(KEY);if(r)return Object.assign({},JSON.parse(JSON.stringify(defState)),JSON.parse(r));}catch(e){}
+  return JSON.parse(JSON.stringify(defState));
+}
+function save(){
+  const json=JSON.stringify(S);
+  try{localStorage.setItem(KEY,json);}catch(e){}
+  if(NATIVE&&CAP.Preferences){try{CAP.Preferences.set({key:KEY,value:json});}catch(e){}}
+}
+const totalO=()=>Object.values(S.stat).reduce((a,b)=>a+b.o,0);
+const totalX=()=>Object.values(S.stat).reduce((a,b)=>a+b.x,0);
+const isGot=d=>{const s=S.stat[d.id];return !!s&&s.o>0&&s.o>s.x;};
+const learned=()=>DATA.filter(isGot).length;
+const weakList=()=>DATA.filter(d=>S.stat[d.id]&&S.stat[d.id].x>0&&S.stat[d.id].x>=S.stat[d.id].o);
+
+const TITLES=[[0,"入門"],[120,"見習い"],[350,"門下生"],[800,"初伝"],[1600,"中伝"],
+ [2800,"奥伝"],[4500,"皆伝"],[7000,"師範"],[10500,"名人"],[15000,"語聖"]];
+function titleOf(x){let t=TITLES[0],n=null;
+  for(let i=0;i<TITLES.length;i++){if(x>=TITLES[i][0]){t=TITLES[i];n=TITLES[i+1]||null;}}
+  return{cur:t,next:n};}
+
+/* ==========================================================
+   小道具
+   ========================================================== */
+const $=id=>document.getElementById(id);
+const todayStr=()=>{const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();};
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);
+  t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function seedOf(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function shuffle(a,rnd=Math.random){for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function pick(a,n,rnd=Math.random){return shuffle(a.slice(),rnd).slice(0,n);}
+const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+/* ---- 音（Web Audio・ファイル不要） ---- */
+let AC=null;
+function ac(){
+  if(S.mute)return null;
+  try{
+    if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state==="suspended")AC.resume();
+    return AC;
+  }catch(e){return null;}
+}
+function tone(f,dur,type,vol,at){
+  const c=ac();if(!c)return;
+  const t0=c.currentTime+(at||0);
+  const o=c.createOscillator(),g=c.createGain();
+  o.type=type||"triangle";o.frequency.setValueAtTime(f,t0);
+  g.gain.setValueAtTime(0,t0);
+  g.gain.linearRampToValueAtTime(vol,t0+.012);
+  g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+  o.connect(g);g.connect(c.destination);o.start(t0);o.stop(t0+dur+.02);
+}
+const PENTA=[523.25,587.33,659.25,783.99,880,1046.5,1174.7,1318.5];
+function sfxOk(combo){
+  const i=Math.min(PENTA.length-1,(combo-1)%PENTA.length);
+  tone(PENTA[i],.32,"triangle",.16,0);
+  tone(PENTA[i]*1.5,.26,"sine",.09,.045);
+  if(combo>=5)tone(PENTA[Math.min(PENTA.length-1,i+2)],.3,"sine",.07,.09);
+}
+function sfxNg(){
+  tone(150,.28,"sawtooth",.14,0);
+  tone(96,.4,"square",.10,.06);
+}
+function sfxTap(){tone(660,.05,"square",.045,0);}
+function sfxStart(){[523.25,659.25,783.99].forEach((f,i)=>tone(f,.3,"triangle",.12,i*.07));}
+function sfxWin(){[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,.5,"triangle",.13,i*.12));}
+function sfxLose(){[392,329.63,261.63,196].forEach((f,i)=>tone(f,.55,"triangle",.13,i*.15));}
+function sfxTick(last){tone(last?1046.5:784,.09,"square",.08,0);}
+/* ---- native bridge (Capacitor)：Web版ではすべてフォールバック ---- */
+function buzz(p){
+  if(S.mute)return;
+  if(NATIVE&&CAP.Haptics){
+    try{Array.isArray(p)?CAP.Haptics.notification({type:"ERROR"}):CAP.Haptics.impact({style:"LIGHT"});}catch(e){}
+    return;
+  }
+  if(navigator.vibrate)try{navigator.vibrate(p);}catch(e){}
+}
+async function nativeRestore(){ /* localStorage が空のとき、ネイティブ保存から復元 */
+  if(!(NATIVE&&CAP.Preferences))return;
+  try{
+    if(localStorage.getItem(KEY))return;
+    const r=await CAP.Preferences.get({key:KEY});
+    if(r&&r.value){S=Object.assign({},JSON.parse(JSON.stringify(defState)),JSON.parse(r.value));save();renderHome();}
+  }catch(e){}
+}
+async function applyReminder(){ /* 今日の修行のリマインド（毎日同時刻・端末内のローカル通知） */
+  if(!(NATIVE&&CAP.LocalNotifications))return false;
+  try{await CAP.LocalNotifications.cancel({notifications:[{id:2001}]});}catch(e){}
+  if(!S.remind.on)return true;
+  try{
+    const p=await CAP.LocalNotifications.requestPermissions();
+    if(p.display!=="granted")return false;
+    const [h,m]=S.remind.time.split(":").map(Number);
+    await CAP.LocalNotifications.schedule({notifications:[{
+      id:2001,title:"語彙道場",body:"今日の修行がまだです。10問だけ稽古しましょう。",
+      schedule:{on:{hour:h,minute:m},repeats:true,allowWhileIdle:true}
+    }]});
+    return true;
+  }catch(e){return false;}
+}
+
+/* ---- BGM（琴のアルペジオを生成。音源ファイル不要） ---- */
+const BGM={gain:null,timer:null,next:0,step:0,mode:"off",loop:0};
+const D4=293.66,F4=349.23,G4=392,A4=440,C5=523.25,D5=587.33,F5=698.46,G5=783.99;
+const KOTO=[
+  D4,A4,D5,A4, F4,A4,C5,A4,   G4,D5,F5,D5, A4,D5,C5,A4,
+  F4,A4,C5,A4, D5,C5,A4,F4,   G4,A4,C5,D5, -1,A4,G5,D5
+];
+const BASSN=[D4/4,G4/4,F4/4,G4/4];
+function bgmVol(){return BGM.mode==="play"?.62:BGM.mode==="calm"?.36:0;}
+function bgmCtx(){
+  const c=ac();if(!c)return null;
+  if(!BGM.gain){
+    BGM.gain=c.createGain();BGM.gain.gain.value=0;
+    const lp=c.createBiquadFilter();lp.type="lowpass";lp.frequency.value=3200;
+    BGM.gain.connect(lp);lp.connect(c.destination);
+  }
+  return c;
+}
+function bgmStart(mode){
+  BGM.mode=mode;
+  if(S.bgmOff||S.mute){bgmStop();return;}
+  const c=bgmCtx();if(!c)return;
+  const g=BGM.gain.gain;g.cancelScheduledValues(c.currentTime);
+  g.setValueAtTime(g.value,c.currentTime);
+  g.linearRampToValueAtTime(bgmVol(),c.currentTime+.9);
+  if(!BGM.timer){BGM.next=c.currentTime+.08;BGM.step=0;BGM.timer=setInterval(bgmTick,90);}
+}
+function bgmStop(){
+  if(!BGM.gain||!AC)return;
+  const g=BGM.gain.gain,c=AC;
+  g.cancelScheduledValues(c.currentTime);g.setValueAtTime(g.value,c.currentTime);
+  g.linearRampToValueAtTime(0,c.currentTime+.5);
+  if(BGM.timer){clearInterval(BGM.timer);BGM.timer=null;}
+}
+function bgmNote(f,t,vol,dec,type){
+  const c=AC,o=c.createOscillator(),g=c.createGain();
+  o.type=type||"triangle";o.frequency.setValueAtTime(f,t);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.008);
+  g.gain.exponentialRampToValueAtTime(.0001,t+dec);
+  o.connect(g);g.connect(BGM.gain);o.start(t);o.stop(t+dec+.02);
+}
+function bgmTick(){
+  const c=AC;if(!c)return;
+  const eighth=60/84/2;
+  while(BGM.next<c.currentTime+.25){
+    const s=BGM.step%32,bar=Math.floor(s/8),beat=s%8,t=BGM.next;
+    const f=KOTO[s];
+    const rest=(BGM.loop%3===2&&beat%2===1&&Math.random()<.35);
+    if(f>0&&!rest){bgmNote(f,t,.16,.55);bgmNote(f*2,t,.035,.16,"sine");}
+    if(beat===0){bgmNote(BASSN[bar],t,.20,1.3,"sine");}
+    if(BGM.mode==="play"){
+      if(beat===0||beat===4){const o=c.createOscillator(),g=c.createGain();
+        o.frequency.setValueAtTime(120,t);o.frequency.exponentialRampToValueAtTime(42,t+.09);
+        g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.0001,t+.14);
+        o.connect(g);g.connect(BGM.gain);o.start(t);o.stop(t+.16);}
+      if(beat===6)bgmNote(1800,t,.05,.08,"square");
+    }
+    if(s===0){bgmNote(2637,t,.07,1.8,"sine");}
+    BGM.step++;if(BGM.step%32===0)BGM.loop++;
+    BGM.next+=eighth;
+  }
+}
+
+/* ---- パーティクル ---- */
+const cv=$("fx"),cx=cv.getContext("2d");let parts=[],raf=null;
+function fit(){const r=$("app").getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);
+  cv.width=r.width*d;cv.height=r.height*d;cv.style.width=r.width+"px";cv.style.height=r.height+"px";
+  cx.setTransform(d,0,0,d,0,0);}
+addEventListener("resize",fit);fit();
+function burst(x,y,cols,n){
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2,s=2+Math.random()*7;
+    parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-2.5,life:1,
+      c:cols[i%cols.length],r:1.5+Math.random()*3});
+  }
+  if(!raf)raf=requestAnimationFrame(loop);
+}
+function loop(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  parts=parts.filter(p=>p.life>0);
+  parts.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;p.vy+=.26;p.vx*=.985;p.life-=.018;
+    cx.globalAlpha=Math.max(0,p.life);cx.fillStyle=p.c;
+    cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.3);cx.fill();
+  });
+  cx.globalAlpha=1;
+  raf=parts.length?requestAnimationFrame(loop):null;
+  if(!parts.length)cx.clearRect(0,0,cv.width,cv.height);
+}
+function flash(kind){
+  const f=$("flash");f.className="flash";void f.offsetWidth;f.className="flash "+kind;
+}
+function slash(){const s=$("slash");s.className="slash";void s.offsetWidth;s.className="slash go";}
+function shake(){const a=$("app");a.classList.remove("shakey");void a.offsetWidth;a.classList.add("shakey");}
+
+/* ==========================================================
+   画面
+   ========================================================== */
+function show(n){
+  document.querySelectorAll(".scr").forEach(s=>s.classList.remove("on"));
+  $("s-"+n).classList.add("on");
+  document.querySelectorAll(".scroll").forEach(s=>s.scrollTop=0);
+}
+
+const ICONS={
+ daily:'<svg viewBox="0 0 24 24" fill="none" stroke="#F2C14E" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/><path d="M9 15l2 2 4-4"/></svg>',
+ time:'<svg viewBox="0 0 24 24" fill="none" stroke="#4FA0FF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>',
+ survival:'<svg viewBox="0 0 24 24" fill="none" stroke="#FF5B6E" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-7-9.7A4.2 4.2 0 0 1 12 8a4.2 4.2 0 0 1 7 3.3C19 16.6 12 21 12 21z"/></svg>',
+ review:'<svg viewBox="0 0 24 24" fill="none" stroke="#38DFA6" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg>'
+};
+const MODE={
+ daily:{name:"今日の修行",ds:"日替わりの10問。続けて連勝日数を伸ばす",n:10,lives:0,perQ:0,total:0},
+ time:{name:"時間攻め",ds:"60秒。速く答えるほど高得点",n:999,lives:0,perQ:0,total:60},
+ survival:{name:"真剣勝負",ds:"1問12秒・三度倒れたら終わり",n:999,lives:3,perQ:12,total:0},
+ review:{name:"弱点復習",ds:"間違えた語だけを狙って潰す",n:12,lives:0,perQ:0,total:0},
+ cat:{name:"分野別",ds:"",n:12,lives:0,perQ:0,total:0},
+ fix:{name:"取りこぼし復習",ds:"",n:12,lives:0,perQ:0,total:0}
+};
+
+function renderHome(){
+  const rnd=mulberry32(seedOf("w"+todayStr()));
+  const t=DATA[Math.floor(rnd()*DATA.length)];
+  $("tw").textContent=t.w;$("tr").textContent=t.r||CATS[t.c];
+  $("tm").textContent=t.m;
+
+  const ti=titleOf(S.exp);
+  $("rk-title").textContent=ti.cur[1];
+  $("rk-next").textContent=ti.next?ti.next[1]+"まで "+(ti.next[0]-S.exp):"皆伝の極み";
+  const base=ti.cur[0],span=ti.next?ti.next[0]-base:1;
+  $("rk-xp").style.width=(ti.next?Math.min(100,(S.exp-base)/span*100):100)+"%";
+
+  $("ch-streak").innerHTML="連勝 <b>"+S.streak.days+"</b> 日";
+  $("ch-learn").innerHTML="習得 <b>"+learned()+"</b> / "+DATA.length;
+  const n=totalO()+totalX();
+  $("ch-acc").innerHTML="正答率 <b>"+(n?Math.round(totalO()/n*100):0)+"</b>%";
+
+  const done=S.dailyDone===todayStr();
+  $("mlist").innerHTML=["daily","time","survival","review"].map(k=>{
+    const m=MODE[k];let rt="";
+    if(k==="daily")rt=done?'<span class="done">済</span>':'<div class="rt">全<b>10</b></div>';
+    else if(k==="review"){const w=weakList().length;rt='<div class="rt"><b>'+w+'</b>語</div>';}
+    else rt='<div class="rt">BEST<b>'+(S.best[k]||0)+'</b></div>';
+    return '<button class="mcard'+(k==="daily"&&!done?" hot":"")+'" data-m="'+k+'">'+
+      '<div class="ico">'+ICONS[k]+'</div><div class="tx"><div class="nm">'+m.name+
+      '</div><div class="ds">'+m.ds+'</div></div>'+rt+'</button>';
+  }).join("");
+  $("mlist").querySelectorAll(".mcard").forEach(b=>b.onclick=()=>start(b.dataset.m));
+
+  $("catwrap").innerHTML=Object.entries(CATS).map(([k,v])=>{
+    const all=DATA.filter(d=>d.c===k),got=all.filter(isGot).length;
+    return '<button class="catb" data-c="'+k+'"><div class="cn">'+v+
+      '</div><div class="cc">'+got+" / "+all.length+'</div></button>';
+  }).join("");
+  $("catwrap").querySelectorAll(".catb").forEach(b=>b.onclick=()=>start("cat",b.dataset.c));
+
+  $("btn-sound").textContent=S.mute?"効果音 OFF":"効果音 ON";
+  $("btn-bgm").textContent=S.bgmOff?"BGM OFF":"BGM ON";
+  $("remind").hidden=!NATIVE;
+  $("rem-tog").classList.toggle("on",!!S.remind.on);
+  $("rem-time").value=S.remind.time||"20:00";
+  $("foot-n").textContent=DATA.length+"語 / "+DATA.length*2+"問 収録";
+}
+
+/* ==========================================================
+   ゲーム進行
+   ========================================================== */
+let G=null,raf2=null,qStart=0;
+function makeQ(item,rnd){
+  const pool=DATA.filter(d=>d.c===item.c&&d.id!==item.id);
+  const opts=shuffle([item,...pick(pool,3,rnd)],rnd);
+  return{item,dir:rnd()<.5?0:1,opts,answer:opts.indexOf(item)};
+}
+function start(mode,cat,items){
+  const cfg=MODE[mode];let list,rnd=Math.random;
+  if(mode==="daily"){
+    rnd=mulberry32(seedOf("d"+todayStr()));
+    list=pick(DATA,10,rnd);
+  }
+  else if(mode==="review"){
+    const w=weakList();
+    if(!w.length){alert("まだ取りこぼした語がありません。まずは他の稽古で語を集めましょう。");return;}
+    list=pick(w,Math.min(12,w.length));
+  }
+  else if(mode==="fix"){
+    list=shuffle(items.slice());
+    if(list.length<5){ /* 少なければ同じ分野の未習得語で補う */
+      const cats=new Set(list.map(d=>d.c));
+      const extra=DATA.filter(d=>cats.has(d.c)&&!isGot(d)&&!list.includes(d));
+      list=list.concat(pick(extra,5-list.length));
+    }
+  }
+  else if(mode==="cat"){
+    const p=DATA.filter(d=>d.c===cat);list=pick(p,Math.min(12,p.length));
+  }
+  else list=shuffle(DATA.slice());
+
+  G={mode,cat,cfg,rnd,list,items,i:0,score:0,combo:0,maxCombo:0,hit:0,miss:0,exp:0,
+     lives:cfg.lives,deadline:0,log:[],locked:false,ended:false};
+  sfxStart();bgmStart("play");
+  $("heat").style.opacity=0;
+  $("combo").className="combo";$("combo").textContent="";
+  show("play");nextQ();
+  if(cfg.total){G.deadline=performance.now()+cfg.total*1000;runTimer();}
+}
+function nextQ(){
+  if(!G||G.ended)return;
+  if(G.cfg.lives&&G.lives<=0)return;
+  $("sheet").classList.remove("up");
+  if(G.i>=G.list.length){
+    if(G.mode==="time")G.list=G.list.concat(shuffle(DATA.slice()));
+    else return end();
+  }
+  const q=makeQ(G.list[G.i],G.rnd);G.q=q;G.locked=false;
+  if(G.combo<2){$("combo").className="combo";$("combo").textContent="";}
+  $("qkind").textContent=q.dir===0?"この語の意味は":"この意味の語は";
+  const txt=q.dir===0?q.item.w:q.item.m,L=txt.length;
+  $("qmain").className="qmain "+(q.dir===0?"word"+(L>=10?" xs":L>=7?" sm":""):"mean"+(L>=22?" sm":""));
+  $("qmain").textContent=q.dir===0?q.item.w:q.item.m;
+  $("qtag").innerHTML=(q.dir===0?CATS[q.item.c]+" ・ ":"")+LVNAME[q.item.lv-1]+lvDots(q.item.lv);
+  $("ans").innerHTML=q.opts.map((o,i)=>
+    '<button class="ab" data-i="'+i+'"><span class="k">'+(i+1)+'</span><span>'+
+    esc(q.dir===0?o.m:o.w)+'</span></button>').join("");
+  $("ans").querySelectorAll(".ab").forEach(b=>b.onclick=()=>answer(+b.dataset.i));
+  updHud();qStart=performance.now();
+  if(G.cfg.perQ){G.deadline=performance.now()+G.cfg.perQ*1000;runTimer();}
+  else if(!G.cfg.total){$("gauge-bar").style.width="0%";$("gauge").classList.remove("warn");}
+}
+function runTimer(){
+  cancelAnimationFrame(raf2);
+  const span=(G.cfg.perQ||G.cfg.total)*1000;
+  (function step(){
+    if(!G||G.ended)return;
+    const left=G.deadline-performance.now(),p=Math.max(0,Math.min(1,left/span));
+    $("gauge-bar").style.width=(p*100)+"%";
+    $("gauge").classList.toggle("warn",p<.28);
+    if(G.cfg.total){
+      const s=Math.ceil(left/1000);
+      if(s<=5&&s>0&&G.tick!==s){G.tick=s;sfxTick(s<=1);}
+    }
+    if(left<=0){
+      if(G.cfg.total)return end();
+      if(!G.locked)return answer(-1);
+      return;
+    }
+    raf2=requestAnimationFrame(step);
+  })();
+}
+function answer(idx){
+  if(!G||G.locked)return;
+  G.locked=true;
+  const q=G.q,ok=idx===q.answer,sec=(performance.now()-qStart)/1000;
+  [...$("ans").children].forEach((b,i)=>{
+    b.disabled=true;
+    if(i===q.answer)b.classList.add("right");
+    else if(i===idx)b.classList.add("wrong");
+    else b.classList.add("fade");
+  });
+  let gain=0;
+  if(ok){
+    G.hit++;G.combo++;G.maxCombo=Math.max(G.maxCombo,G.combo);
+    const speed=Math.max(0,Math.round((1-Math.min(sec,8)/8)*60));
+    const mult=Math.min(3,1+G.combo*.1);
+    gain=Math.round((BASE[q.item.lv-1]+speed)*mult);
+    G.score+=gain;G.exp+=10+Math.min(20,G.combo*2);
+    sfxOk(G.combo);buzz(14);flash("ok");slash();
+    const r=$("app").getBoundingClientRect();
+    burst(r.width/2,r.height*.42,["#F2C14E","#FFF3D0","#38DFA6","#fff"],G.combo>=5?34:22);
+    const c=$("combo");
+    if(G.combo>=2){
+      c.textContent=G.combo+" 連答  ×"+mult.toFixed(1);
+      c.className="combo on";void c.offsetWidth;c.className="combo on pop";
+    }
+    $("heat").style.opacity=Math.min(.9,Math.max(0,(G.combo-2)*.16));
+  }else{
+    G.miss++;G.combo=0;
+    if(G.cfg.lives){
+      G.lives--;
+      const lv=$("hud-lives");lv.classList.remove("hit");void lv.offsetWidth;lv.classList.add("hit");
+    }
+    sfxNg();buzz([45,60,45]);flash("ng");shake();
+    $("combo").className="combo";$("heat").style.opacity=0;
+  }
+  const s=S.stat[q.item.id]||(S.stat[q.item.id]={o:0,x:0});ok?s.o++:s.x++;
+  G.log.push({item:q.item,ok});save();
+
+  $("sheet").className="sheet "+(ok?"ok":"ng");
+  setTimeout(()=>{if(G&&!G.ended&&G.locked)$("sheet").classList.add("up");},340);
+  $("sh-verdict").textContent=ok?"正 解":(idx===-1?"時間切れ":"不 正 解");
+  $("sh-pts").textContent=gain?"+"+gain:"";
+  $("sh-word").textContent=q.item.w;
+  $("sh-read").textContent=q.item.r?q.item.r:CATS[q.item.c];
+  $("sh-mean").textContent=q.item.m;
+  updHud();G.i++;
+
+  if(G.cfg.lives&&G.lives<=0){setTimeout(()=>end("lose"),1500);return;}
+  if(G.mode==="time"&&ok)setTimeout(()=>{if(G&&!G.ended&&G.locked)nextQ();},1250);
+}
+function updHud(){
+  $("hud-score").textContent=G.score;
+  $("hud-lives").innerHTML=G.cfg.lives?
+    Array.from({length:G.cfg.lives},(_,i)=>'<span class="life'+(i<G.cfg.lives-G.lives?" lost":"")+'"></span>').join(""):"";
+  const total=Math.min(G.cfg.n,G.list.length);
+  $("hud-prog").textContent=G.cfg.n<900?Math.min(G.i+1,total)+" / "+total:"第"+(G.i+1)+"問";
+}
+const RANKS=[[3000,"名人"],[2200,"師範"],[1500,"皆伝"],[950,"目録"],[550,"初伝"],[250,"門下生"],[0,"見習い"]];
+function end(reason){
+  if(!G||G.ended)return;
+  G.ended=true;cancelAnimationFrame(raf2);
+  $("sheet").classList.remove("up");
+  const n=G.hit+G.miss,acc=n?Math.round(G.hit/n*100):0;
+  if(G.mode==="daily"&&S.dailyDone!==todayStr()){
+    const y=new Date();y.setDate(y.getDate()-1);
+    const ys=y.getFullYear()+"-"+(y.getMonth()+1)+"-"+y.getDate();
+    S.streak.days=(S.streak.last===ys)?S.streak.days+1:1;
+    S.streak.last=todayStr();S.dailyDone=todayStr();
+  }
+  const best=G.score>(S.best[G.mode]||0);
+  if(best)S.best[G.mode]=G.score;
+  S.exp+=G.exp;save();
+  reason==="lose"?sfxLose():sfxWin();
+
+  $("res-mode").textContent=(reason==="lose"?"三度倒れる ・ ":"")+G.cfg.name+(G.mode==="cat"?" ・ "+CATS[G.cat]:"");
+  $("res-stamp").className="stamp"+(reason==="lose"?" bad":"");
+  $("res-stamp").textContent=reason==="lose"?"不覚":
+    (RANKS.find(r=>G.score>=r[0])||RANKS[RANKS.length-1])[1];
+  $("res-hit").textContent=G.hit+"/"+n;
+  $("res-acc").textContent=acc+"%";
+  $("res-combo").textContent=G.maxCombo;
+  $("res-xp").textContent="経験値 +"+G.exp;
+  $("res-best").innerHTML=best&&G.score>0?'<div class="newbest">自己最高記録</div>':"";
+  const miss=G.log.filter(l=>!l.ok);
+  $("res-lt").textContent=miss.length?"取りこぼした語  "+miss.length:"出題された語  "+G.log.length;
+  const rows=miss.length?miss:G.log;
+  $("res-list").innerHTML='<div class="wl">'+rows.map(l=>rowHtml(l.item,l.ok)).join("")+"</div>";
+  const fixBtn=$("btn-fix");
+  if(miss.length){fixBtn.hidden=false;fixBtn.textContent="取りこぼした "+miss.length+" 語を今すぐ復習";
+    $("btn-again").className="big sub2";}
+  else{fixBtn.hidden=true;$("btn-again").className="big";}
+  G.missItems=miss.map(l=>l.item);
+  bgmStart("calm");
+  show("result");
+  countUp($("res-score"),G.score);
+  if(G.score>0&&reason!=="lose")setTimeout(()=>{const r=$("app").getBoundingClientRect();
+    burst(r.width/2,r.height*.30,["#F2C14E","#FFF3D0","#fff"],40);},260);
+}
+function countUp(el,to){
+  const t0=performance.now(),dur=700;
+  (function s(){
+    const p=Math.min(1,(performance.now()-t0)/dur);
+    el.textContent=Math.round(to*(1-Math.pow(1-p,3)));
+    if(p<1)requestAnimationFrame(s);
+  })();
+}
+function lvDots(lv){return '<span class="lv">'+[1,2,3].map(i=>'<i'+(i<=lv?' class="on"':'')+'></i>').join("")+'</span>';}
+function rowHtml(it,ok){
+  return '<div class="wr '+(ok?"got":"")+'"><div class="w">'+esc(it.w)+
+    (it.r?'<em>'+esc(it.r)+'</em>':"")+'</div><div class="m">'+esc(it.m)+
+    '</div><div class="t">'+CATS[it.c]+lvDots(it.lv)+'</div></div>';
+}
+
+/* ---- 語彙帳 ---- */
+let bf="all";
+function renderBook(){
+  const fs=[["all","すべて"],["weak","苦手"],["got","習得済み"]].concat(Object.entries(CATS));
+  $("bk-filt").innerHTML=fs.map(([k,v])=>
+    '<button data-f="'+k+'"'+(bf===k?' class="on"':'')+'>'+v+'</button>').join("");
+  $("bk-filt").querySelectorAll("button").forEach(b=>b.onclick=()=>{bf=b.dataset.f;sfxTap();renderBook();});
+  let l=DATA.filter(d=>S.stat[d.id]);
+  if(bf==="weak")l=weakList();
+  else if(bf==="got")l=l.filter(isGot);
+  else if(bf!=="all")l=l.filter(d=>d.c===bf);
+  $("bk-list").innerHTML=l.length?
+    '<div class="wl">'+l.map(d=>{const s=S.stat[d.id];
+      return rowHtml(d,isGot(d)).replace('</div><div class="t">',
+        '</div><div class="t">正'+s.o+" 誤"+s.x+" ・ ");}).join("")+"</div>"
+    :'<div class="empty">まだ記録がありません。稽古を始めると、出会った語がここに集まります。</div>';
+}
+
+/* ---- 操作 ---- */
+$("btn-next").onclick=()=>{sfxTap();nextQ();};
+$("btn-quit").onclick=()=>{
+  if(G&&!G.ended){
+    if(G.hit+G.miss===0){G.ended=true;cancelAnimationFrame(raf2);goHome();return;}
+    if(confirm("稽古をここで終えますか？ ここまでの結果が出ます。"))end();
+  }else goHome();
+};
+$("btn-again").onclick=()=>start(G.mode,G.cat,G.items);
+$("btn-fix").onclick=()=>start("fix",null,G.missItems);
+const goHome=()=>{renderHome();show("home");bgmStart("calm");};
+$("btn-home").onclick=goHome;
+$("btn-home2").onclick=goHome;
+$("btn-book").onclick=()=>{sfxTap();renderBook();show("book");};
+$("btn-sound").onclick=()=>{S.mute=!S.mute;save();renderHome();if(!S.mute)sfxTap();bgmStart(BGM.mode==="off"?"calm":BGM.mode);};
+$("btn-bgm").onclick=()=>{S.bgmOff=!S.bgmOff;save();renderHome();bgmStart(BGM.mode==="off"?"calm":BGM.mode);};
+$("rem-tog").onclick=async()=>{
+  S.remind.on=!S.remind.on;save();sfxTap();
+  const ok=await applyReminder();
+  if(S.remind.on&&!ok){S.remind.on=false;save();$("rem-note").textContent="通知が許可されていません。設定アプリから許可してください";}
+  else $("rem-note").textContent=S.remind.on?"毎日 "+S.remind.time+" に届きます":"アプリを閉じていても届きます";
+  $("rem-tog").classList.toggle("on",!!S.remind.on);
+};
+$("rem-time").onchange=()=>{S.remind.time=$("rem-time").value||"20:00";save();if(S.remind.on)applyReminder();
+  $("rem-note").textContent=S.remind.on?"毎日 "+S.remind.time+" に届きます":"アプリを閉じていても届きます";};
+/* 最初のタップでBGMを起動（ブラウザの自動再生制限のため） */
+document.addEventListener("pointerdown",()=>{if(BGM.mode==="off")bgmStart("calm");},{once:true});
+$("btn-reset").onclick=()=>{
+  if(confirm("記録・語彙帳・称号をすべて消します。よろしいですか？")){
+    const m=S.mute;S=JSON.parse(JSON.stringify(defState));S.mute=m;save();renderHome();
+  }
+};
+addEventListener("keydown",e=>{
+  if(!$("s-play").classList.contains("on"))return;
+  if(e.key>="1"&&e.key<="4"){const b=$("ans").querySelector('[data-i="'+(+e.key-1)+'"]');if(b&&!b.disabled)b.click();}
+  if((e.key==="Enter"||e.key===" ")&&$("sheet").classList.contains("up")){e.preventDefault();nextQ();}
+});
+
+
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden)bgmStop();else if(BGM.mode!=="off")bgmStart(BGM.mode);
+});
+renderHome();
+nativeRestore();
+if("serviceWorker"in navigator&&!NATIVE&&location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>

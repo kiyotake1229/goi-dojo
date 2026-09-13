@@ -1,0 +1,31 @@
+<!doctype html><meta charset="utf-8"><title>語彙道場 アイコン生成</title>
+<!-- アイコン画像（icon-*.png / ios-app/assets/icon.png）の生成元。ブラウザで開き、コンソールで getPng(サイズ) を呼ぶと data URI が得られる -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@800&display=swap">
+<style>body{background:#333;color:#fff;font:14px sans-serif}canvas{border:1px solid #666;margin:8px}</style>
+<div id="st">loading font…</div>
+<canvas id="c" width="1024" height="1024"></canvas>
+<script>
+function draw(){
+  const c=document.getElementById('c'),x=c.getContext('2d'),W=1024;
+  const bg=x.createLinearGradient(0,0,W,W);bg.addColorStop(0,'#2A1A55');bg.addColorStop(.55,'#141033');bg.addColorStop(1,'#0A0D1A');
+  x.fillStyle=bg;x.fillRect(0,0,W,W);
+  // 紙目
+  x.fillStyle='rgba(255,255,255,.035)';for(let i=0;i<W;i+=3)for(let j=0;j<W;j+=3)if(((i*7+j*13)%11)===0)x.fillRect(i,j,1,1);
+  const gold=x.createLinearGradient(0,200,0,820);gold.addColorStop(0,'#FFF3D0');gold.addColorStop(.55,'#F2C14E');gold.addColorStop(1,'#B8801E');
+  // 斬撃線
+  x.save();x.translate(512,705);x.rotate(-14*Math.PI/180);
+  const sl=x.createLinearGradient(-600,0,600,0);sl.addColorStop(0,'rgba(255,255,255,0)');sl.addColorStop(.5,'#fff');sl.addColorStop(1,'rgba(255,255,255,0)');
+  x.shadowColor='rgba(255,255,255,.8)';x.shadowBlur=18;x.fillStyle=sl;x.fillRect(-600,-5,1200,10);x.restore();
+  // リング
+  x.shadowColor='rgba(242,193,78,.55)';x.shadowBlur=40;
+  x.strokeStyle=gold;x.lineWidth=22;x.beginPath();x.arc(512,512,330,0,Math.PI*2);x.stroke();
+  x.shadowBlur=0;x.strokeStyle='rgba(242,193,78,.25)';x.lineWidth=4;x.beginPath();x.arc(512,512,292,0,Math.PI*2);x.stroke();
+  // 文字
+  x.font="800 400px 'Shippori Mincho B1'";x.textAlign='center';x.textBaseline='alphabetic';
+  x.shadowColor='rgba(242,193,78,.45)';x.shadowBlur=30;x.fillStyle=gold;x.fillText('語',512,650);
+  document.getElementById('st').textContent='done: '+document.fonts.check("800 400px 'Shippori Mincho B1'");
+}
+document.fonts.load("800 400px 'Shippori Mincho B1'").then(()=>document.fonts.ready).then(draw);
+window.getPng=(size)=>{const c=document.getElementById('c');if(size===1024)return c.toDataURL('image/png');
+  const o=document.createElement('canvas');o.width=o.height=size;const x=o.getContext('2d');x.imageSmoothingQuality='high';x.drawImage(c,0,0,size,size);return o.toDataURL('image/png');};
+</script>
