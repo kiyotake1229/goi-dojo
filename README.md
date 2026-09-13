@@ -4,7 +4,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| 状態 | **Web版 公開中 / PWA対応済み / iOSプロジェクト構築済み（pod install 待ち）** |
+| 状態 | **Web版 公開中 / PWA対応済み / iOSプロジェクト構築済み・ビルド確認済み（引き渡し可）** |
 | 公開URL（開発確認用） | https://claude.ai/code/artifact/b6bb42a1-e191-4d1e-b665-2f7a28ca4db2 |
 | サポートURL / Web公開 | https://kiyotake1229.github.io/goi-dojo/ （GitHub Pages） |
 | Bundle ID | `work.ltv.goidojo` |
@@ -58,11 +58,15 @@ git add -A && git commit -m "変更内容" && git push
 
 ## 残作業
 
-- [ ] Xcode をインストールした環境で `ios-app/` にて `npx cap sync ios`（pod install）
+- [x] iOSビルド確認（GitHub Actions の macOS ランナーで `pod install` → `xcodebuild` 成功。手元にXcodeが無いため）
 - [ ] 実機で触覚・通知・データ永続化を確認
 - [x] GitHub Pages（`goi-dojo` リポジトリ）を作成しサポートURLを公開
 - [ ] App Store 用スクリーンショット（6.7 / 6.5 / 5.5 インチ）
 - [ ] Apple Developer Program 登録 → 岩崎さんへ引き渡し
+
+## iOSビルドの自動確認
+
+`index.html` か `ios-app/` を push すると GitHub Actions（`.github/workflows/ios-build.yml`）が macOS 上で署名なしビルドを実行する。結果は https://github.com/kiyotake1229/goi-dojo/actions で確認。手元に Xcode が無くてもビルドが壊れていないことを検証できる。
 
 ## 今後の候補
 

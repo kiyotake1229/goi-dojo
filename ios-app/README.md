@@ -17,7 +17,7 @@ Webアプリ本体（`../index.html`）をネイティブiOSアプリとして�
 | アプリアイコン・スプラッシュ | 生成済み（1024px・透過なし） |
 | ネイティブ触覚・通知・保存 | 組み込み済み（`../index.html` 内で `NATIVE` 分岐） |
 | 縦画面固定・ダーク表示 | 設定済み（`Info.plist`） |
-| `pod install` | **未実行**。Xcodeが無い環境で構築したため。Xcodeのある環境で下記を1回実行 |
+| `pod install` | 手元では未実行（Xcode無し）。**GitHub Actions の macOS 上で `pod install` → ビルド成功を確認済み**。Xcodeのある環境で下記を1回実行 |
 
 ```bash
 npm install
