@@ -4,9 +4,9 @@
 
 | 項目 | 内容 |
 |------|------|
-| 状態 | **Web版 完成 / PWA対応済み / iOSプロジェクト構築済み（pod install 待ち）** |
+| 状態 | **Web版 公開中 / PWA対応済み / iOSプロジェクト構築済み（pod install 待ち）** |
 | 公開URL（開発確認用） | https://claude.ai/code/artifact/b6bb42a1-e191-4d1e-b665-2f7a28ca4db2 |
-| サポートURL（予定） | https://kiyotake1229.github.io/goi-dojo/ （GitHub Pages・未公開） |
+| サポートURL / Web公開 | https://kiyotake1229.github.io/goi-dojo/ （GitHub Pages） |
 | Bundle ID | `work.ltv.goidojo` |
 | 収録 | 681語・1,362問（7分野・難易度3段階）。すべて自作 |
 | 通信 | なし。データは localStorage（iOS版は Preferences にも二重保存） |
@@ -35,6 +35,14 @@
   ios-app/                iOSアプリ（Capacitor）。手順は ios-app/岩崎さんへの引き渡し手順.md
 ```
 
+## 公開の更新
+
+`index.html` を変更したら、このフォルダで commit → push すると GitHub Pages に反映される（数分）。
+
+```bash
+git add -A && git commit -m "変更内容" && git push
+```
+
 ## 語彙の追加
 
 `index.html` 内の `DATA` 配列に1行追加する。
@@ -52,7 +60,7 @@
 
 - [ ] Xcode をインストールした環境で `ios-app/` にて `npx cap sync ios`（pod install）
 - [ ] 実機で触覚・通知・データ永続化を確認
-- [ ] GitHub Pages（`goi-dojo` リポジトリ）を作成しサポートURLを公開
+- [x] GitHub Pages（`goi-dojo` リポジトリ）を作成しサポートURLを公開
 - [ ] App Store 用スクリーンショット（6.7 / 6.5 / 5.5 インチ）
 - [ ] Apple Developer Program 登録 → 岩崎さんへ引き渡し
 
