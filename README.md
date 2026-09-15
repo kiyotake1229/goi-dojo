@@ -13,16 +13,18 @@
 
 ---
 
-## 社内説明資料
+## 社内説明資料・開発ドキュメント
 
-岩崎さんに説明するときの資料一式は `資料/` にある。
+文書は `docs/` で管理している（命名規則・連番のルールは [docs/README.md](docs/README.md)）。
 
 | 資料 | 場所 |
 |---|---|
+| 社内説明資料（PDF） | [docs/20260915_DOC_0001_ALL_社内説明資料（語彙道場）.pdf](docs/20260915_DOC_0001_ALL_社内説明資料（語彙道場）.pdf) |
+| 社内説明資料（説明・費用） | [docs/20260915_DOC_0001_ALL_社内説明資料（語彙道場）.md](docs/20260915_DOC_0001_ALL_社内説明資料（語彙道場）.md) |
+| 話す台本 | [docs/20260915_DOC_0002_ALL_プレゼンの進め方（語彙道場）.md](docs/20260915_DOC_0002_ALL_プレゼンの進め方（語彙道場）.md) |
 | スライド（Claude Design。閲覧・修正・PDF書き出し） | https://claude.ai/code/artifact/208fd26f-99c5-4bcc-bde8-0ab38506f27e |
-| スライド（PDF） | `資料/プレゼン資料/語彙道場_社内説明.pdf` |
-| 話す台本 | [資料/プレゼンの進め方.md](資料/プレゼンの進め方.md) |
-| スライドの生成元 | `資料/プレゼン資料/gen.py`（文言を直して `python3 gen.py`） |
+| スライドの生成元 | `tools/slides/gen.py`（文言を直して `python3 tools/slides/gen.py`） |
+| 文書一覧 | `docs/manager/docs.json`（文書を足したら `bash docs/manager/generate_docs_json.sh`） |
 
 ---
 
