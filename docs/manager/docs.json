@@ -1,8 +1,18 @@
 {
-  "next_no": 2,
-  "total": 1,
-  "generated_at": "2026-09-15T13:53:31.369502",
+  "next_no": 3,
+  "total": 2,
+  "generated_at": "2026-11-06T13:51:30.641648",
   "documents": [
+    {
+      "no": 2,
+      "date": "2026-11-06",
+      "type": "ENH",
+      "category": "IOS",
+      "title": "プライバシーマニフェストの追加",
+      "filename": "20261106_ENH_0002_IOS_プライバシーマニフェストの追加.md",
+      "extension": "md",
+      "summary": "App Store へのアップロードで求められる申告を iOS アプリにそろえた。プライバシーマニフェスト（`PrivacyInfo.xcprivacy`。トラッキングなし・収集データなし・「理由の申告が要る API」の利用理由）をアプリに入れた。GitHub Actions のビルド確認（Xcode 26）で、ビルドが通ることと、できたアプリにこれらが入っていることを確かめた。"
+    },
     {
       "no": 1,
       "date": "2026-09-15",

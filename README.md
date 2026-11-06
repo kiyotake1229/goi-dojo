@@ -79,6 +79,7 @@ git add -A && git commit -m "変更内容" && git push
 ## 残作業
 
 - [x] iOSビルド確認（GitHub Actions の macOS ランナーで `pod install` → `xcodebuild` 成功。手元にXcodeが無いため）
+- [x] プライバシーマニフェスト（`PrivacyInfo.xcprivacy`）を同梱し、ビルド確認を Xcode 26 に固定（docs #0002）
 - [ ] 実機で触覚・通知・データ永続化を確認
 - [x] GitHub Pages（`goi-dojo` リポジトリ）を作成しサポートURLを公開
 - [ ] App Store 用スクリーンショット（6.7 / 6.5 / 5.5 インチ）
@@ -86,7 +87,7 @@ git add -A && git commit -m "変更内容" && git push
 
 ## iOSビルドの自動確認
 
-`index.html` か `ios-app/` を push すると GitHub Actions（`.github/workflows/ios-build.yml`）が macOS 上で署名なしビルドを実行する。結果は https://github.com/kiyotake1229/goi-dojo/actions で確認。手元に Xcode が無くてもビルドが壊れていないことを検証できる。
+`index.html` か `ios-app/` を push すると GitHub Actions（`.github/workflows/ios-build.yml`）が macOS 上で署名なしビルドを実行する。結果は https://github.com/kiyotake1229/goi-dojo/actions で確認。手元に Xcode が無くてもビルドが壊れていないことを検証できる。Xcode は 26 に固定（Capacitor 7 は UIScene に対応していないため、Xcode 27 ではビルドしない）。シミュレータ向けと実機向けをビルドし、プライバシーマニフェストと暗号化の申告がアプリに入っていることも確かめる（docs #0002）。
 
 ## 今後の候補
 
